@@ -1,0 +1,94 @@
+document.addEventListener('alpine:init', () => {
+  const datosOriginales = {
+    usuarios: [
+      { id: 1, nombre: 'Juan Calquín', correo: 'juan.calquin@mail.udp.cl', clave: '1234', rol: 'usuario' },
+      { id: 2, nombre: 'Paulina González', correo: 'paulina.gonzalez10@mail.udp.cl', clave: '1234', rol: 'usuario' },
+      { id: 3, nombre: 'Diego Guzmán', correo: 'diego.guzman@mail.udp.cl', clave: '1234', rol: 'usuario' },
+      { id: 4, nombre: 'Administrador', correo: 'admin@mail.udp.cl', clave: 'admin123', rol: 'admin' }
+    ],
+
+    cultivos: [
+      { id: 1, usuarioId: 1, nombre: 'Cardenal', tipo: 'Flor', fecha: '2026-03-15', estacional: true },
+      { id: 2, usuarioId: 1, nombre: 'Canelo', tipo: 'Árbol', fecha: '2026-01-10', estacional: false },
+      { id: 3, usuarioId: 2, nombre: 'Tomate Cherry', tipo: 'Alimentario', fecha: '2026-05-20', estacional: true },
+      { id: 4, usuarioId: 2, nombre: 'Nomeolvides', tipo: 'Flor', fecha: '2026-04-02', estacional: true },
+      { id: 5, usuarioId: 2, nombre: 'Maitén', tipo: 'Árbol', fecha: '2025-11-25', estacional: false },
+      { id: 6, usuarioId: 3, nombre: 'papa', tipo: 'Alimentario', fecha: '2026-06-08', estacional: true },
+      { id: 7, usuarioId: 3, nombre: 'Quillay', tipo: 'Árbol', fecha: '2026-09-30', estacional: false }
+    ],
+
+    sensores: [
+      { id: 1, usuarioId: 1, nombre: 'Juan_Humedad_Suelo_1', descripcion: 'Humedad del suelo en la zona 1', unidad: 'm^3/m^3', estado: 'Activo' },
+      { id: 2, usuarioId: 1, nombre: 'Juan_Acidez_Suelo_1', descripcion: 'Acidez del suelo en la zona 1', unidad: 'pH', estado: 'Activo' },
+      { id: 3, usuarioId: 1, nombre: 'Juan_Temperatura_1', descripcion: 'Temperatura del ambiente en la zona 1', unidad: '°C', estado: 'Activo' },
+      { id: 4, usuarioId: 2, nombre: 'Paulina_Humedad_Suelo_1', descripcion: 'Humedad del suelo en la zona 1', unidad: 'm^3/m^3', estado: 'Activo' },
+      { id: 5, usuarioId: 2, nombre: 'Paulina_Temperatura_1', descripcion: 'Temperatura del ambiente en la zona 1', unidad: '°C', estado: 'Activo' },
+      { id: 6, usuarioId: 2, nombre: 'Paulina_Humedad_Ambiente_1', descripcion: 'Humedad del aire en la zona 1', unidad: '%HR', estado: 'Activo' },
+      { id: 7, usuarioId: 2, nombre: 'Paulina_Acidez_Suelo_1', descripcion: 'Acidez del suelo en la zona 1', unidad: 'pH', estado: 'Desconectado' },
+      { id: 8, usuarioId: 3, nombre: 'Diego_Humedad_Suelo_1', descripcion: 'Humedad del suelo en la zona 1', unidad: 'm^3/m^3', estado: 'Mantenimiento' },
+      { id: 9, usuarioId: 3, nombre: 'Diego_Temperatura_1', descripcion: 'Temperatura del ambiente en la zona 1', unidad: '°C', estado: 'Activo' }
+    ],
+
+    lecturas: [
+      { sensor: 'Juan_Temperatura_1', fecha: '2026-10-27', valor: 19.5 },
+      { sensor: 'Juan_Temperatura_1', fecha: '2026-10-28', valor: 22.0 },
+      { sensor: 'Juan_Temperatura_1', fecha: '2026-10-29', valor: 21.0 },
+      { sensor: 'Juan_Acidez_Suelo_1', fecha: '2026-10-27', valor: 6.4 },
+      { sensor: 'Juan_Acidez_Suelo_1', fecha: '2026-10-28', valor: 6.6 },
+      { sensor: 'Juan_Acidez_Suelo_1', fecha: '2026-10-29', valor: 6.5 },
+      { sensor: 'Juan_Humedad_Suelo_1', fecha: '2026-10-27', valor: 0.35 },
+      { sensor: 'Juan_Humedad_Suelo_1', fecha: '2026-10-28', valor: 0.32 },
+      { sensor: 'Juan_Humedad_Suelo_1', fecha: '2026-10-29', valor: 0.30 },
+      { sensor: 'Paulina_Humedad_Ambiente_1', fecha: '2026-10-27', valor: 58 },
+      { sensor: 'Paulina_Humedad_Ambiente_1', fecha: '2026-10-28', valor: 62 },
+      { sensor: 'Paulina_Humedad_Ambiente_1', fecha: '2026-10-29', valor: 60 }
+    ]
+  };
+
+  //Por lo visto, entre lo que busqué, como estamos usando alpine con CDN,
+  //no se pueden leer los archivos json de forma local, por lo que se necesita una copia aquí
+  //Ya en el servidor apache, no debería haber problemas, creo :/ 
+
+  // Copia para no modificar los datos originales.
+  const copiar = (lista) => JSON.parse(JSON.stringify(lista));
+
+  Alpine.store('datos', {
+    usuarios: copiar(datosOriginales.usuarios),
+    lecturas: copiar(datosOriginales.lecturas),
+    cultivos: copiar(datosOriginales.cultivos),
+    sensores: copiar(datosOriginales.sensores),
+
+    // Siguiente id disponible de una lista.
+    siguienteId(lista) {
+      return lista.reduce((max, r) => Math.max(max, r.id), 0) + 1;
+    },
+
+    //cultivo, usuarioId es provisorio hasta tener sesión real.
+    agregarCultivo({ nombre, tipo, fecha, estacional = false, usuarioId = 1 }) {
+      const cultivo = {
+        id: this.siguienteId(this.cultivos),
+        usuarioId,
+        nombre,
+        tipo,
+        fecha,
+        estacional
+      };
+      this.cultivos.push(cultivo);
+      return cultivo;
+    },
+
+    //sensor, usuarioId es provisorio hasta tener sesión real.
+    agregarSensor({ nombre, descripcion, unidad, estado = 'Activo', usuarioId = 1 }) {
+      const sensor = {
+        id: this.siguienteId(this.sensores),
+        usuarioId,
+        nombre,
+        descripcion,
+        unidad,
+        estado
+      };
+      this.sensores.push(sensor);
+      return sensor;
+    }
+  });
+});
