@@ -1,0 +1,33 @@
+[
+    {
+    "id": 1,
+    "nombre": "Juan Calquín",
+    "correo": "juan.calquin@mail.udp.cl",
+    "clave": "1234",
+    "rol": "usuario"
+    },
+
+    {
+    "id": 2,
+    "nombre": "Paulina González",
+    "correo": "paulina.gonzalez10@mail.udp.cl",
+    "clave": "1234",
+    "rol": "usuario"
+    },
+    
+    {
+    "id": 3,
+    "nombre":"Diego Guzmán",
+    "correo": "diego.guzman@mail.udp.cl",
+    "clave": "1234",
+    "rol": "usuario"
+    },
+
+    {
+    "id": 4,
+    "nombre": "Administrador",
+    "correo": "admin@mail.udp.cl",
+    "clave": "admin123",
+    "rol":"admin"
+    }
+]

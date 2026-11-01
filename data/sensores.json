@@ -1,0 +1,77 @@
+[
+    {
+        "id": 1,
+        "usuarioId": 1,
+        "nombre": "Juan_Humedad_Suelo_1",
+        "descripcion": "Humedad del suelo en la zona 1",
+        "unidad": "m^3/m^3",
+        "estado": "Activo"
+    },
+    {
+        "id": 2,
+        "usuarioId": 1,
+        "nombre": "Juan_Acidez_Suelo_1",
+        "descripcion": "Acidez del suelo en la zona 1",
+        "unidad": "pH",
+        "estado": "Activo"
+    },
+    {
+        "id": 3,
+        "usuarioId": 1,
+        "nombre": "Juan_Temperatura_1",
+        "descripcion": "Temperatura del ambiente en la zona 1",
+        "unidad": "°C",
+        "estado": "Activo"
+    },
+    {
+        "id": 4,
+        "usuarioId": 2,
+        "nombre": "Paulina_Humedad_Suelo_1",
+        "descripcion": "Humedad del suelo en la zona 1",
+        "unidad": "m^3/m^3",
+        "estado": "Activo"
+
+    },
+    {
+        "id": 5,
+        "usuarioId": 2,
+        "nombre": "Paulina_Temperatura_1",
+        "descripcion": "Temperatura del ambiente en la zona 1",
+        "unidad": "°C",
+        "estado": "Activo"
+
+    },
+    {
+        "id": 6,
+        "usuarioId": 2,
+        "nombre": "Paulina_Humedad_Ambiente_1",
+        "descripcion": "Humedad del aire en la zona 1",
+        "unidad": "%HR",
+        "estado": "Activo"
+    },
+    {
+         "id": 7,
+        "usuarioId": 2,
+        "nombre": "Paulina_Acidez_Suelo_1",
+        "descripcion": "Acidez del suelo en la zona 1",
+        "unidad": "pH",
+        "estado": "Desconectado"
+    },
+    {
+        "id": 8,
+        "usuarioId": 3,
+        "nombre": "Diego_Humedad_Suelo_1",
+        "descripcion": "Humedad del suelo en la zona 1",
+        "unidad": "m^3/m^3",
+        "estado": "Mantenimiento"
+    },
+    {
+        "id": 9,
+        "usuarioId": 3,
+        "nombre": "Diego_Temperatura_1",
+        "descripcion": "Temperatura del ambiente en la zona 1",
+        "unidad": "°C",
+        "estado": "Activo"
+    }
+
+]

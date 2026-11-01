@@ -1,0 +1,60 @@
+[
+    {
+        "id": 1,
+        "usuarioId": 1,
+        "nombre": "Cardenal",
+        "tipo": "Flor",
+        "fecha": "2026-03-15",
+        "estacional": true
+    },
+    
+    {
+        "id": 2,
+        "usuarioId": 1,
+        "nombre": "Canelo",
+        "tipo": "Árbol",
+        "fecha": "2026-01-10",
+        "estacional": false
+    },
+    {
+        "id": 3,
+        "usuarioId": 2,
+        "nombre": "Tomate Cherry",
+        "tipo": "Alimentario",
+        "fecha": "2026-05-20",
+        "estacional": true
+    },
+    {
+        "id": 4,
+        "usuarioId": 2,
+        "nombre": "Nomeolvides",
+        "tipo": "Flor",
+        "fecha": "2026-04-02",
+        "estacional": true
+    },
+    {
+        "id": 5,
+        "usuarioId": 2,
+        "nombre": "Maitén",
+        "tipo": "Árbol",
+        "fecha": "2025-11-25",
+        "estacional": false
+    },
+    {
+        "id": 6,
+        "usuarioId": 3,
+        "nombre": "papa",
+        "tipo": "Alimentario",
+        "fecha": "2026-06-08",
+        "estacional": true
+    },
+    {
+        "id": 7,
+        "usuarioId": 3,
+        "nombre": "Quillay",
+        "tipo": "Árbol",
+        "fecha": "2026-09-30",
+        "estacional": false
+    }
+
+]

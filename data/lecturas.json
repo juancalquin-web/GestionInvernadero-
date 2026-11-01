@@ -1,0 +1,62 @@
+[
+    {
+        "sensor": "Juan_Temperatura_1",
+        "fecha": "2026-10-27",
+        "valor": 19.5
+    },
+    {
+        "sensor": "Juan_Temperatura_1",
+        "fecha": "2026-10-28",
+        "valor": 22.0
+    },
+    {
+        "sensor": "Juan_Temperatura_1",
+        "fecha": "2026-10-29",
+        "valor": 21.0
+    },
+    {
+        "sensor": "Juan_Acidez_Suelo_1",
+        "fecha": "2026-10-27",
+        "valor": 6.4
+    },
+    {
+        "sensor": "Juan_Acidez_Suelo_1",
+        "fecha": "2026-10-28",
+        "valor": 6.6
+    },
+    {
+        "sensor": "Juan_Acidez_Suelo_1",
+        "fecha": "2026-10-29",
+        "valor": 6.5
+    },
+    {
+        "sensor": "Juan_Humedad_Suelo_1",
+        "fecha": "2026-10-27",
+        "valor": 0.35
+    },
+    {
+        "sensor": "Juan_Humedad_Suelo_1",
+        "fecha": "2026-10-28",
+        "valor": 0.32
+    },
+    {
+        "sensor": "Juan_Humedad_Suelo_1",
+        "fecha": "2026-10-29",
+        "valor": 0.30
+    },
+    {
+        "sensor": "Paulina_Humedad_Ambiente_1",
+        "fecha": "2026-10-27",
+        "valor": 58
+    },
+    {
+        "sensor": "Paulina_Humedad_Ambiente_1",
+        "fecha": "2026-10-28",
+        "valor": 62
+    },
+    {
+        "sensor": "Paulina_Humedad_Ambiente_1",
+        "fecha": "2026-10-29",
+        "valor": 60
+    }
+]
