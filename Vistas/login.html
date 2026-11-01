@@ -7,28 +7,31 @@
   <link rel="stylesheet" href="../CSS/global.css">
   <title>Iniciar sesión - Invernadero</title>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="../JS/app.js"></script>
+  
 </head>
 <body>
   <main id="login">
     <h1>&#x1FAB4; Invernadero</h1>
     <p>Inicia sesión para continuar</p>
-    <p class="muted">Acceso de demostración: no verifica contraseñas ni es autenticación segura.</p>
-    <form action="dashboard.html">
+    <p class="muted">Acceso de demostración: no es autenticación segura.</p>
+    <form x-data="login()" @submit.prevent="ingresar()">
       <div>
         <label for="usuario">Correo electrónico</label>
-        <input type="email" id="usuario" autocomplete="username" required>
+        <input type="email" id="usuario" autocomplete="username" x-model="correo" required>
       </div>
       <div>
         <label for="clave">Contraseña</label>
-        <input type="password" id="clave" autocomplete="current-password" minlength="4" required>
+        <input type="password" id="clave" autocomplete="current-password" minlength="4" x-model="clave" required>
       </div>
+      <p class="muted" role="alert" x-show="error" x-text="error"></p>
       <button type="submit" class="button-primario">Ingresar</button>
     </form>
     <div class="demo-section">
       <p class="demo-title">Acceso rápido de demostración</p>
       <div class="demo-action">
-        <a href="dashboard.html" class="button button-secundario">Ver como Usuario</a>
-        <a href="admin.html" class="button button-secundario">Ver como Administrador</a>
+        <a href="usuario/dashboard.html" class="button button-secundario">Ver como Usuario</a>
+        <a href="admin/admin.html" class="button button-secundario">Ver como Administrador</a>
       </div>
     </div>
   </main>
