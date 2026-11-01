@@ -2,9 +2,9 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="CSS/global.css">
-        <link rel="stylesheet" href="CSS/admin.css">
+        <meta name="vieport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../CSS/global.css">
+        <link rel="stylesheet" href="../CSS/admin.css">
         <title>Panel Admin </title>
     </head>
     <body>
@@ -13,214 +13,21 @@
             <a href="admin.html" class="logo logo-admin">&#x1FAB4; &#x1F6E1;&#xFE0F; Gestión de Invernaderos</a>
             <nav class="nav-links">
                 <a href="admin.html" class="nav-button active">Inicio Administrador</a>
+                <a href="admin-usuarios.html" class="nav-button">Usuarios</a>
+                <a href="admin-invernaderos.html" class="nav-button">Invernaderos</a>
                 <a href="login.html" class="nav-button button-logout">Cerrar Sesión</a>
-                
             </nav>
         </header>
 
         <main class="main-container">
             <h2>Panel de Administración Global</h2>
-            
+
+            <!--Panel de métricas globales-->
             <div class="admin-grid">
-                <!--Panel de métricas globales-->
                 <div class="card metric-card"><h3>Total de Usuarios</h3><p class="metric-value">3</p></div>
                 <div class="card metric-card"><h3>Cantidad de Invernaderos</h3><p class="metric-value">3</p></div>
                 <div class="card metric-card"><h3>Total de Cultivos</h3><p class="metric-value">7</p></div>
                 <div class="card metric-card"><h3>Total de Sensores</h3><p class="metric-value">9</p></div>
-            </div>
-
-            <!--Gestión de Cuentas y Usuarios-->
-            
-                <div class="admin-header-actions">
-                    <h3>Gestión de Usuarios</h3>
-                    <button class="button button-primario" onclick="alert('Esto creará un nuevo usuario')">+ Crear Nuevo Usuario</button>
-                    <!--onclick="alert()" permite que se cree un mensaje de alerta al apretar el botón para decirte qué hace el botón-->
-                </div>
-
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Usuario</th>
-                            <th>Correo</th>
-                            <th>Cultivos</th>
-                            <th>Sensores</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Juan Calquín</td>
-                            <td>juan.calquin@mail.udp.cl</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>
-                                <button class="button-action delete" onclick="confirm('¿Eliminar cuenta y todos sus datos asociados?')">Eliminar Cuenta</button>
-                                <!--onclick="confirm()" permite que se cree un mensaje de confirmación al apretar el botón para seguir o cancelar la operación que realiza el botón-->
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>paulina.gonzalez10@mail.udp.cl</td>
-                            <td>3</td>
-                            <td>4</td>
-                            <td>
-                                <button class="button-action delete" onclick="confirm('¿Eliminar cuenta?')">Eliminar Cuenta</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Diego Guzmán</td>
-                            <td>diego.guzman6@mail.udp.cl</td>
-                            <td>2</td>
-                            <td>2</td>
-                            <td>
-                                <button class="button-action delete" onclick="confirm('¿Eliminar cuenta?')">Eliminar Cuenta</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-            <!--Consulta de invernaderos por usuario con filtro(no sé si funcione pero estudiando me aparecieron las listas desplegables y quiero usarlas <: )-->
-            <div class="card admin-table-container">
-                <h3>Consulta de Invernaderos</h3>
-
-                <div class="admin-filter">
-                    <label for="filter-usuario">Filtrar por Usuario</label>
-                    <select id="filter-usuario">
-                        <option value="all">Todos los Usuarios</option>
-                        <option value="juan">Juan Calquín</option>
-                        <option value="paulina">Paulina González</option>
-                        <option value="diego">Diego Guzmán</option>
-                    </select>
-                </div>
-
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Propietario</th>
-                            <th>Recurso</th>
-                            <th>Tipo</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        <!--No noté que eran tantos recursos y que tendría que poner 16 filas de la tabla ;-; -->
-                        <!--Descubrí que span sirve para agrupar "categorías" de elementos en una línea-->
-                        <!--Lo busqué después del control porque no sabía para qué era, al menos lo puedo usar ahora -->
-                        <tr>
-                            <td>Juan Calquín</td>
-                            <td>Cardenal (Pelargonium hortorum)</td>
-                            <td>Cultivo (Flor)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Juan Calquín</td>
-                            <td>Canelo (Drimys winteri)</td>
-                            <td>Cultivo (Árbol)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Juan Calquín</td>
-                            <td>Humedad_Suelo_Zona_1</td>
-                            <td>Sensor (m^3/m^3)</td> <!--Cómo se ponen fórmulas matemáticas???-->
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Juan Calquín</td>
-                            <td>Acidez_Suelo_Zona_1</td>
-                            <td>Sensor (pH)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Juan Calquín</td>
-                            <td>Temperatura_Zona_1</td>
-                            <td>Sensor (°C)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Tomate Cherry (Solanum lycopersicum)</td>
-                            <td>Cultivo (Alimentario)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Humedad_Suelo_Zona_1</td>
-                            <td>Sensor (m^3/m^3)</td> 
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Temperatura_Zona_1</td>
-                            <td>Sensor (°C)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Humedad_Ambiente_Zona_1</td>
-                            <td>Sensor (%HR)</td> <!--HR es humedad relativa-->
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Nomeolvides (Myosotis sylvatica)</td>
-                            <td>Cultivo (Flor)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Maitén (Maytenus boaria)</td>
-                            <td>Cultivo (Árbol)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Acidez_Suelo_Zona_2</td>
-                            <td>Sensor (pH)</td>
-                            <td><span class="danger-mark">Desconectado</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Diego Guzmán</td>
-                            <td>Papa (Solanum tuberosus)</td>
-                            <td>Cultivo (Alimentario)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Diego Guzmán</td>
-                            <td>Humedad_Suelo_Zona_1</td>
-                            <td>Sensor (m^3/m^3)</td>
-                            <td><span class="warning-mark">Mantenimiento</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Diego Guzmán</td>
-                            <td>Temperatura_Zona_1</td>
-                            <td>Sensor (°C)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Diego Guzmán</td>
-                            <td>Quillay (Quillaja saponaria)</td>
-                            <td>Cultivo (Árbol)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </main>
     </body>

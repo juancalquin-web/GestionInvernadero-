@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="vieport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../CSS/global.css">
+        <link rel="stylesheet" href="../CSS/admin.css">
+        <title>Usuarios - Panel Admin</title>
+    </head>
+    <body>
+        <header class="navbar">
+            <!--Encabezado página admin-->
+            <a href="admin.html" class="logo logo-admin">&#x1FAB4; &#x1F6E1;&#xFE0F; Gestión de Invernaderos</a>
+            <nav class="nav-links">
+                <a href="admin.html" class="nav-button">Inicio Administrador</a>
+                <a href="admin-usuarios.html" class="nav-button active">Usuarios</a>
+                <a href="admin-invernaderos.html" class="nav-button">Invernaderos</a>
+                <a href="login.html" class="nav-button button-logout">Cerrar Sesión</a>
+            </nav>
+        </header>
+
+        <main class="main-container">
+            <h2>Gestión de Usuarios</h2>
+
+            <div class="card admin-table-container">
+                <div class="admin-header-actions">
+                    <h3>Usuarios del sistema</h3>
+                    <button class="button button-primario" onclick="alert('Esto creará un nuevo usuario')">+ Crear Nuevo Usuario</button>
+                    <!--onclick="alert()" permite que se cree un mensaje de alerta al apretar el botón para decirte qué hace el botón-->
+                </div>
+
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Correo</th>
+                            <th>Cultivos</th>
+                            <th>Sensores</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Juan Calquín</td>
+                            <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="640e11050a4a07050815110d0a2409050d084a1100144a0708">[email&#160;protected]</a></td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>
+                                <button class="button-action edit" onclick="alert('Esto editará los datos de Juan Calquín')">Editar</button>
+                                <button class="button-action delete" onclick="confirm('¿Eliminar cuenta y todos sus datos asociados?')">Eliminar Cuenta</button>
+                                <!--onclick="confirm()" permite que se cree un mensaje de confirmación al apretar el botón para seguir o cancelar la operación que realiza el botón-->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Paulina González</td>
+                            <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d9a9b8acb5b0b7b8f7beb6b7a3b8b5bca3e8e999b4b8b0b5f7acbda9f7bab5">[email&#160;protected]</a></td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>
+                                <button class="button-action edit" onclick="alert('Esto editará los datos de Paulina González')">Editar</button>
+                                <button class="button-action delete" onclick="confirm('¿Eliminar cuenta?')">Eliminar Cuenta</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Diego Guzmán</td>
+                            <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="21454844464e0f46545b4c404f17614c40484d0f5445510f424d">[email&#160;protected]</a></td>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>
+                                <button class="button-action edit" onclick="alert('Esto editará los datos de Diego Guzmán')">Editar</button>
+                                <button class="button-action delete" onclick="confirm('¿Eliminar cuenta?')">Eliminar Cuenta</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</html>

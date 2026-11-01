@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="vieport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../CSS/global.css">
+        <link rel="stylesheet" href="../CSS/admin.css">
+        <title>Invernaderos - Panel Admin</title>
+    </head>
+    <body>
+        <header class="navbar">
+            <!--Encabezado página admin-->
+            <a href="admin.html" class="logo logo-admin">&#x1FAB4; &#x1F6E1;&#xFE0F; Gestión de Invernaderos</a>
+            <nav class="nav-links">
+                <a href="admin.html" class="nav-button">Inicio Administrador</a>
+                <a href="admin-usuarios.html" class="nav-button">Usuarios</a>
+                <a href="admin-invernaderos.html" class="nav-button active">Invernaderos</a>
+                <a href="login.html" class="nav-button button-logout">Cerrar Sesión</a>
+            </nav>
+        </header>
+
+        <main class="main-container">
+            <h2>Invernaderos Globales</h2>
+
+            <!--Consulta de invernaderos por usuario con filtro(no sé si funcione pero estudiando me aparecieron las listas desplegables y quiero usarlas <: )-->
+            <div class="card admin-table-container">
+                <h3>Cultivos y Sensores de Usuarios del Sistema</h3>
+
+                <div class="admin-filter">
+                    <label for="filter-usuario">Filtrar por Usuario</label>
+                    <select id="filter-usuario">
+                        <option value="all">Todos los Usuarios</option>
+                        <option value="juan">Juan Calquín</option>
+                        <option value="paulina">Paulina González</option>
+                        <option value="diego">Diego Guzmán</option>
+                    </select>
+                </div>
+
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Propietario</th>
+                            <th>Recurso</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Juan Calquín</td>
+                            <td>Cardenal (Pelargonium hortorum)</td>
+                            <td>Cultivo (Flor)</td>
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Juan Calquín</td>
+                            <td>Canelo (Drimys winteri)</td>
+                            <td>Cultivo (Árbol)</td>
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Juan Calquín</td>
+                            <td>Humedad_Suelo_Zona_1</td>
+                            <td>Sensor (m^3/m^3)</td> <!--Cómo se ponen fórmulas matemáticas???-->
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Juan Calquín</td>
+                            <td>Acidez_Suelo_Zona_1</td>
+                            <td>Sensor (pH)</td>
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Juan Calquín</td>
+                            <td>Temperatura_Zona_1</td>
+                            <td>Sensor (°C)</td>
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Paulina González</td>
+                            <td>Tomate Cherry (Solanum lycopersicum)</td>
+                            <td>Cultivo (Alimentario)</td>
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Paulina González</td>
+                            <td>Humedad_Suelo_Zona_1</td>
+                            <td>Sensor (m^3/m^3)</td> 
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Paulina González</td>
+                            <td>Temperatura_Zona_1</td>
+                            <td>Sensor (°C)</td>
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Paulina González</td>
+                            <td>Humedad_Ambiente_Zona_1</td>
+                            <td>Sensor (%HR)</td> <!--HR es humedad relativa-->
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Paulina González</td>
+                            <td>Nomeolvides (Myosotis sylvatica)</td>
+                            <td>Cultivo (Flor)</td>
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Paulina González</td>
+                            <td>Maitén (Maytenus boaria)</td>
+                            <td>Cultivo (Árbol)</td>
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Paulina González</td>
+                            <td>Acidez_Suelo_Zona_2</td>
+                            <td>Sensor (pH)</td>
+                            <td><span class="danger-mark">Desconectado</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Diego Guzmán</td>
+                            <td>Papa (Solanum tuberosus)</td>
+                            <td>Cultivo (Alimentario)</td>
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Diego Guzmán</td>
+                            <td>Humedad_Suelo_Zona_1</td>
+                            <td>Sensor (m^3/m^3)</td>
+                            <td><span class="warning-mark">Mantenimiento</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Diego Guzmán</td>
+                            <td>Temperatura_Zona_1</td>
+                            <td>Sensor (°C)</td>
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Diego Guzmán</td>
+                            <td>Quillay (Quillaja saponaria)</td>
+                            <td>Cultivo (Árbol)</td>
+                            <td><span class="success-mark">Activo</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </body>
+</html>
