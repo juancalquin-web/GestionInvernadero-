@@ -3,44 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="CSS/colorLogin.css">
-  <title>Invernadero</title>
-
-  <style>
-
-  </style>
+  <link rel="stylesheet" href="../CSS/colorLogin.css">
+  <link rel="stylesheet" href="../CSS/global.css">
+  <title>Iniciar sesión - Invernadero</title>
 </head>
 <body>
-
-  <div id="login">
-
-    <h1>&#x1FAB4;Invernadero</h1>
+  <main id="login">
+    <h1>&#x1FAB4; Invernadero</h1>
     <p>Inicia sesión para continuar</p>
-
-    <form action="/api/v1/login" method="POST">
-
+    <p class="muted">Acceso de demostración: no verifica contraseñas ni es autenticación segura.</p>
+    <form action="dashboard.html">
       <div>
-        <label for="usuario">Usuario</label>
-        <input type="text" id="usuario" name="usuario" />
+        <label for="usuario">Correo electrónico</label>
+        <input type="email" id="usuario" autocomplete="username" required>
       </div>
-
       <div>
         <label for="clave">Contraseña</label>
-        <input type="password" id="clave" name="clave" />
+        <input type="password" id="clave" autocomplete="current-password" minlength="4" required>
       </div>
-
-      <button type="submit">Ingresar</button>
-
+      <button type="submit" class="button-primario">Ingresar</button>
     </form>
-
     <div class="demo-section">
-      <p class="demo-title">Acceso por tipo de usuario (demo):</p>
+      <p class="demo-title">Acceso rápido de demostración</p>
       <div class="demo-action">
         <a href="dashboard.html" class="button button-secundario">Ver como Usuario</a>
         <a href="admin.html" class="button button-secundario">Ver como Administrador</a>
-
       </div>
     </div>
-  </div>
+  </main>
 </body>
 </html>

@@ -1,100 +1,78 @@
-<!DOCTYPE html> <!--Código de Juan-->
+<!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="CSS/agregar.css">
-        <link rel="stylesheet" href="CSS/global.css">
-        <title>Crear - Agregar</title>
-    </head>
-    <body>
-    <header class="navbar">
-        <!--Encabezado para las páginas-->
-        <a href="dashboard.html" class="logo">&#x1FAB4; Gestión de Invernaderos</a>
-        <nav class="nav-links">
-            <a href="dashboard.html" class="nav-button active">Inicio</a>
-            <a href="invernadero.html" class="nav-button">Invernadero</a>
-            <a href="agregar.html" class="nav-button">Agregar</a>
-            <a href="estadisticas.html" class="nav-button">Estadísticas</a>
-            <a href="login.html" class="nav-button button-logout">Cerrar Sesión</a>
-        </nav>
-    </header>
-    <!--Este header va en todas las vistas de usuario, excepto admin y login-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../CSS/agregar.css">
+  <link rel="stylesheet" href="../CSS/global.css">
+  <title>Crear - Agregar</title>
+</head>
+<body>
+<header class="navbar">
+  <a href="dashboard.html" class="logo">&#x1FAB4; Gestión Invernaderos</a>
+  <nav class="navbar-navigation" aria-label="Navegación principal">
+    <input type="checkbox" id="menu-toggle" class="menu-toggle"><label for="menu-toggle" class="menu-toggle-label">☰ Menú</label>
+    <div class="nav-links">
+      <a href="dashboard.html" class="nav-button">Inicio</a>
+      <a href="invernadero.html" class="nav-button">Invernadero</a>
+      <a href="agregar.html" class="nav-button active">Agregar</a>
+      <a href="estadisticas.html" class="nav-button">Estadísticas</a>
+      <a href="login.html" class="nav-button button-logout">Cerrar Sesión</a>
+    </div>
+  </nav>
+</header>
+<main class="main-container">
+  <h1>Crear nuevo registro</h1>
 
-        <main class = "main-container">
-            <h1>Crear Nuevo Registro</h1>
+  <section class="card">
+    <label for="tipo">¿Qué deseas crear?</label>
+    <select id="tipo">
+      <option value="cultivo">Cultivo</option>
+      <option value="sensor">Sensor</option>
+    </select>
+  </section>
 
-            <div class="card">
-                <label for="tipo">¿Qué deseas crear?</label>
+  <form id="formCultivo" class="card">
+    <label for="nombreCultivo">Nombre</label>
+    <input id="nombreCultivo" type="text" maxlength="80" required>
+    <label for="tipoCultivo">Tipo de cultivo</label>
+    <input id="tipoCultivo" type="text" maxlength="60" required>
+    <label for="fecha">Fecha de cultivo</label>
+    <input id="fecha" type="date" required>
+    <label class="checkbox-field"><input type="checkbox"> Es estacional</label>
+    <button type="submit" class="button-primario">Crear registro</button>
+  </form>
 
-                <select id="tipo">
-                    <option value="cultivo">Cultivo</option>
-                    <option value="sensor">Sensor</option>
-                </select>
-            </div>
+  <form id="formSensor" class="card" hidden>
+    <label for="nombreSensor">Nombre</label>
+    <input id="nombreSensor" type="text" maxlength="80" required>
+    <label for="descripcion">Descripción</label>
+    <input id="descripcion" type="text" maxlength="160" required>
+    <label for="unidad">Unidad</label>
+    <input id="unidad" type="text" maxlength="30" required>
+    <label for="estado">Estado</label>
+    <select id="estado">
+      <option>Activo</option>
+      <option>Mantenimiento</option>
+      <option>Desconectado</option>
+    </select>
+    <button type="submit" class="button-primario">Crear registro</button>
+  </form>
+</main>
 
-            <form id="formCultivo" class="card">
-                <div>
-                    <label for="nombreCultivo">Nombre</label>
-                    <input type="text" id="nombreCultivo" name="nombreCultivo" placeholder="Ej: Tomate Cherry" />
-                </div>
+<script>
+  const selectorTipo = document.getElementById('tipo');
+  const formularioCultivo = document.getElementById('formCultivo');
+  const formularioSensor = document.getElementById('formSensor');
 
-                <div>
-                    <label for="tipoCultivo">Tipo</label>
-                    <input type="text" id="tipoCultivo" name="tipoCultivo" placeholder="Ej: Alimentario, Flor, etc." />
-                </div>
+  function actualizarFormulario() {
+    const mostrarCultivo = selectorTipo.value === 'cultivo';
+    formularioCultivo.hidden = !mostrarCultivo;
+    formularioSensor.hidden = mostrarCultivo;
+  }
 
-                <div>
-                    <label for="fecha">Fecha de cultivo</label>
-                    <input type="date" id="fecha" name="fecha" />
-                </div>
-
-                <div>
-                    <label for="estacional">Es estacional?</label>
-                    <input type="checkbox" id="estacional" name="estacional" />
-                </div>
-
-                <button type="submit">Guardar Cultivo</button>
-            </form>
-
-            <br/>
-
-            <form id="formSensor" class="card">
-                <div>
-                    <label for="nombreSensor">Nombre</label>
-                    <input type="text" id="nombreSensor" name="nombreSensor" placeholder="Ej: Temp_Suelo_A, Hum_Suelo_C, etc." />
-                </div>
-
-                <div>
-
-                    <label for="descripción">Descripcion</label>
-                    <input type="text" id="descripción" name="descripción" placeholder="Ubicación y detalles del sensor." />
-                </div>
-
-                <div>
-                    <label for="unidad">Unidad</label>
-                    <input type="text" id="unidad" name="unidad" placeholder="Ej: %, °C, ppm, etc." />
-                </div>
-
-                <div>
-                    <button type="submit">Guardar Recurso</button>
-                </div>
-            </form>
-        </main>
-
-        <script>
-            const selectorTipo = document.getElementById('tipo');
-            const formularioCultivo = document.getElementById('formCultivo');
-            const formularioSensor = document.getElementById('formSensor');
-
-            function actualizarFormulario(){
-                const mostrarCultivo = selectorTipo.value == 'cultivo';
-                formularioCultivo.hidden = !mostrarCultivo;
-                formularioSensor.hidden = mostrarCultivo;
-            }
-
-            selectorTipo.addEventListener('change', actualizarFormulario);
-            actualizarFormulario();
-        </script>
-    </body>
+  selectorTipo.addEventListener('change', actualizarFormulario);
+  actualizarFormulario();
+</script>
+</body>
 </html>

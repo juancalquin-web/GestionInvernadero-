@@ -1,65 +1,86 @@
-<!DOCTYPE html> <!--Código de Juan-->
+<!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="CSS/invernadero.css">
-        <link rel="stylesheet" href="CSS/global.css">
-        <title>usuario-invernadero</title>
-    </head>
-    <body>
-    <header class="navbar">
-        <!--Encabezado para las páginas-->
-        <a href="dashboard.html" class="logo">&#x1FAB4; Gestión de Invernaderos</a>
-        <nav class="nav-links">
-            <a href="dashboard.html" class="nav-button ">Inicio</a>
-            <a href="invernadero.html" class="nav-button active">Invernadero</a>
-            <a href="agregar.html" class="nav-button">Agregar</a>
-            <a href="estadisticas.html" class="nav-button">Estadísticas</a>
-            <a href="login.html" class="nav-button button-logout">Cerrar Sesión</a>
-        </nav>
-    </header>
-    <h1>Mi Invernadero</h1>
-    <h3>Cultivos</h3>
-    <table class="tabla-cultivos">
-        <tr>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../CSS/invernadero.css">
+  <link rel="stylesheet" href="../CSS/global.css">
+  <title>Mi Invernadero</title>
+</head>
+<body>
+<header class="navbar">
+  <a href="dashboard.html" class="logo">&#x1FAB4; Gestión Invernaderos</a>
+  <nav class="navbar-navigation" aria-label="Navegación principal">
+    <input type="checkbox" id="menu-toggle" class="menu-toggle"><label for="menu-toggle" class="menu-toggle-label">☰ Menú</label>
+    <div class="nav-links">
+      <a href="dashboard.html" class="nav-button">Inicio</a>
+      <a href="invernadero.html" class="nav-button active">Invernadero</a>
+      <a href="agregar.html" class="nav-button">Agregar</a>
+      <a href="estadisticas.html" class="nav-button">Estadísticas</a>
+      <a href="login.html" class="nav-button button-logout">Cerrar Sesión</a>
+    </div>
+  </nav>
+</header>
+<main class="main-container">
+  <h1>Mi Invernadero</h1>
+  <section class="card">
+    <h2>Cultivos</h2>
+    <div class="table-container">
+      <table class="tabla-cultivos">
+        <thead>
+          <tr>
             <th>Nombre</th>
             <th>Tipo</th>
             <th>Fecha</th>
             <th>Estacional</th>
-        </tr>
-        <tr>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
             <td>Girasol</td>
             <td>Herbácea anual</td>
-            <td>2024-03-15 </td>
-            <td>si</td>
-        </tr>
-        <tr>
+            <td>2024-03-15</td>
+            <td>Sí</td>
+          </tr>
+          <tr>
             <td>Flor de Cerezo</td>
             <td>Árbol caducifolio</td>
             <td>2024-07-22</td>
-            <td>si</td>
-        </tr>
-
-    </table>
-    <h3>Sensores</h3>
-    <table class="tabla-sensores">
-        <tr>
+            <td>Sí</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Sensores</h2>
+    <div class="table-container">
+      <table class="tabla-sensores">
+        <thead>
+          <tr>
             <th>Nombre</th>
             <th>Descripción</th>
             <th>Unidad</th>
-        </tr>
-        <tr>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
             <td>Sensor de Temperatura</td>
             <td>Mide la temperatura ambiente del Invernadero</td>
             <td>°C</td>
-        </tr>
-        <tr>
+            <td><span class="success-mark">&#x1F7E2; Activo</span></td>
+          </tr>
+          <tr>
             <td>Sensor de Humedad</td>
-            <td>Mide la Humedad del aire</td>
+            <td>Mide la humedad del aire</td>
             <td>%</td>
-        </tr>
-    </table>
-
-    </body>
+            <td><span class="success-mark">&#x1F7E2; Activo</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+</body>
 </html>

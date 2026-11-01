@@ -1,104 +1,123 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="CSS/estadisticas.css">
-        <link rel="stylesheet" href="CSS/gobal.css">
-        <title>Datos - Estadísticas</title>
-    </head>
-    <body>
-    <header class="navbar">
-        <!--Encabezado para las páginas-->
-        <a href="dashboard.html" class="logo">&#x1FAB4; Gestión de Invernaderos</a>
-        <nav class="nav-links">
-            <a href="dashboard.html" class="nav-button active">Inicio</a>
-            <a href="invernadero.html" class="nav-button">Invernadero</a>
-            <a href="agregar.html" class="nav-button">Agregar</a>
-            <a href="estadisticas.html" class="nav-button">Estadísticas</a>
-            <a href="login.html" class="nav-button button-logout">Cerrar Sesión</a>
-        </nav>
-    </header>
-    <!--Este header va en todas las vistas de usuario, excepto admin y login-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../CSS/estadisticas.css">
+  <link rel="stylesheet" href="../CSS/global.css">
+  <title>Datos - Estadísticas</title>
+</head>
+<body>
+<header class="navbar">
+  <!-- INICIO CAMBIO: logo -->
+  <a href="dashboard.html" class="logo">&#x1FAB4; Gestión Invernaderos</a>
+  <!-- FIN CAMBIO: logo -->
+  <nav class="navbar-navigation" aria-label="Navegación principal">
+    <input type="checkbox" id="menu-toggle" class="menu-toggle"><label for="menu-toggle" class="menu-toggle-label">☰ Menú</label>
+    <div class="nav-links">
+      <a href="dashboard.html" class="nav-button">Inicio</a>
+      <a href="invernadero.html" class="nav-button">Invernadero</a>
+      <a href="agregar.html" class="nav-button">Agregar</a>
+      <a href="estadisticas.html" class="nav-button active">Estadísticas</a>
+      <a href="login.html" class="nav-button button-logout">Cerrar Sesión</a>
+    </div>
+  </nav>
+</header>
+<main class="main-container">
+  <h1>Historial de datos de sensores</h1>
+  <section class="card">
+    <div class="control-datos">
+      <div class="filter-datos">
+        <label for="sensor-pick">Seleccionar sensor</label>
+        <select id="sensor-pick">
+          <option value="Temp_Zona_1">Temperatura_Zona_1 (°C)</option>
+          <option value="Hum_Suelo_1">Humedad_Suelo_Zona_1 (m^3/m^3)</option>
+        </select>
+      </div>
+      <div class="filter-datos">
+        <label for="limit-pick">Mostrar últimos</label>
+        <select id="limit-pick">
+          <option value="10">10 registros</option>
+          <option value="50">50 registros</option>
+          <option value="100">100 registros</option>
+        </select>
+      </div>
+    </div>
+    
+    <figure class="chart-container" aria-labelledby="titulo-grafico">
+      <figcaption id="titulo-grafico">Lecturas de Temperatura_Zona_1</figcaption>
+      <svg viewBox="0 0 720 280" role="img" aria-labelledby="titulo-grafico descripcion-grafico">
+        <desc id="descripcion-grafico">Gráfico de 5 lecturas de temperatura, ordenadas cronológicamente.</desc>
+        <line class="chart-gridline" x1="60" y1="235" x2="700" y2="235"></line>
+        <polyline class="chart-line" points="60,235 220,178 380,155 540,120 700,40"></polyline>
+        <g>
+          <circle class="chart-point" cx="60" cy="235" r="5"><title>13-09-2026 10:00hrs: 18 °C</title></circle>
+          <text class="chart-label" x="60" y="260" text-anchor="middle">10:00hrs</text>
+        </g>
+        <g>
+          <circle class="chart-point" cx="220" cy="178" r="5"><title>13-09-2026 11:00hrs: 23 °C</title></circle>
+          <text class="chart-label" x="220" y="260" text-anchor="middle">11:00hrs</text>
+        </g>
+        <g>
+          <circle class="chart-point" cx="380" cy="155" r="5"><title>13-09-2026 12:00hrs: 25 °C</title></circle>
+          <text class="chart-label" x="380" y="260" text-anchor="middle">12:00hrs</text>
+        </g>
+        <g>
+          <circle class="chart-point" cx="540" cy="120" r="5"><title>13-09-2026 13:00hrs: 28 °C</title></circle>
+          <text class="chart-label" x="540" y="260" text-anchor="middle">13:00hrs</text>
+        </g>
+        <g>
+          <circle class="chart-point" cx="700" cy="40" r="5"><title>13-09-2026 14:00hrs: 35 °C</title></circle>
+          <text class="chart-label" x="700" y="260" text-anchor="middle">14:00hrs</text>
+        </g>
+      </svg>
+    </figure>
 
-    <main class="main-container">
-        <h2>Historial de Datos de Sensores</h2>
-        <!--Pondré los datos del usuario con menos sensores-->
-
-        <!--CÓMO SE PONE UN GRÁFICO!? O-O -->
-        <!--No sé poner ni imágenes y voy a poner un gráfico, tendré que investigar después-->
-        <!--Tabla tendrá que ser-->
-        <div class="card">
-            <div class="control-datos"> 
-                <div class="filter-datos">
-                    <label for="sensor-pick">Seleccionar Sensor:</label>
-                    <select id="sensor-pick">
-                        <option value="Temp_Zona_1">Temperatura_Zona_1 (°C)</option>
-                        <option value="Hum_Suelo_1">Humedad_Suelo_Zona_1 (m^3/m^3)</option>
-                    </select>
-                </div>
-
-                <div class="filter-datos">
-                    <label for="limit-pick">Mostrar Últimos:</label>
-                    <select id="limit-pick">
-                        <option value="10">10 registros</option>
-                        <option value="50">50 registros</option>
-                        <option value="100">100 registros</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="table-container">
-                <table class="tabla-datos">
-                    <thead>
-                        <tr>
-                            <th>Fecha y Hora</th>
-                            <th>Sensor</th>
-                            <th>Valor Medido</th>
-                            <th>Estado de Lectura</th>
-                        </tr>
-                    </thead>
-                    
-                    <tbody>
-                        <tr>
-                            <td>13-09-2026 14:00hrs</td>
-                            <td>Temperatura_Zona_1</td>
-                            <td>35 °C</td>
-                            <td><span class="danger-mark">Alerta Crítica</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>13-09-2026 13:00hrs</td>
-                            <td>Temperatura_Zona_1</td>
-                            <td>28 °C</td>
-                            <td><span class="warning-mark">Precaución</span></td>
-                        </tr>
-
-                         <tr>
-                            <td>13-09-2026 12:00hrs</td>
-                            <td>Temperatura_Zona_1</td>
-                            <td>25 °C</td>
-                            <td><span class="warning-mark">Precaución</span></td>
-                        </tr>
-
-                         <tr>
-                            <td>13-09-2026 11:00hrs</td>
-                            <td>Temperatura_Zona_1</td>
-                            <td>23 °C</td>
-                            <td><span class="success-mark">Normal</span></td>
-                        </tr>
-
-                         <tr>
-                            <td>13-09-2026 10:00hrs</td>
-                            <td>Temperatura_Zona_1</td>
-                            <td>18 °C</td>
-                            <td><span class="success-mark">Normal</span></td>
-                        </tr>
-                    </tbody>
-
-                </table>
-            </div>
-        </div>
-    </main>
-    </body>
+    <div class="table-container">
+      <table class="tabla-datos">
+        <thead>
+          <tr>
+            <th>Fecha y hora</th>
+            <th>Sensor</th>
+            <th>Valor medido</th>
+            <th>Estado de lectura</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>13-09-2026 14:00hrs</td>
+            <td>Temperatura_Zona_1</td>
+            <td>35 °C</td>
+            <td><span class="danger-mark">Alerta Crítica</span></td>
+          </tr>
+          <tr>
+            <td>13-09-2026 13:00hrs</td>
+            <td>Temperatura_Zona_1</td>
+            <td>28 °C</td>
+            <td><span class="warning-mark">Precaución</span></td>
+          </tr>
+          <tr>
+            <td>13-09-2026 12:00hrs</td>
+            <td>Temperatura_Zona_1</td>
+            <td>25 °C</td>
+            <td><span class="warning-mark">Precaución</span></td>
+          </tr>
+          <tr>
+            <td>13-09-2026 11:00hrs</td>
+            <td>Temperatura_Zona_1</td>
+            <td>23 °C</td>
+            <td><span class="success-mark">Normal</span></td>
+          </tr>
+          <tr>
+            <td>13-09-2026 10:00hrs</td>
+            <td>Temperatura_Zona_1</td>
+            <td>18 °C</td>
+            <td><span class="success-mark">Normal</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+</body>
 </html>
