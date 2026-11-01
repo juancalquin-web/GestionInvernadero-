@@ -120,7 +120,6 @@
     background: #71300d;
     border-color: #71300d;
 }
-
 .user-form {
     margin: 1rem 0;
     padding: 1rem;
@@ -131,7 +130,7 @@
 
 .user-fields {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
     gap: 0.75rem;
     align-items: end;
 }
@@ -144,4 +143,36 @@
 }
 .admin-table-container > h2 { 
     color: #8c3b0d; 
+}
+
+.user-fields label {
+    min-width: 0;
+}
+
+.user-fields input {
+    width: 100%;
+}
+
+.user-actions {
+    align-items: stretch;
+}
+
+.user-actions button {
+    flex: 1 1 8rem;
+}
+
+.admin-table .button-action {
+    margin: 0.15rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+    .admin-header-actions .button,
+    .user-actions button {
+        width: 100%;
+    }
+
+    .admin-table .button-action {
+        display: inline-block;
+    }
 }
