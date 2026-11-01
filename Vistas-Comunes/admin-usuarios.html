@@ -76,8 +76,31 @@
     </div>
   </section>
 </main>
-</body>
 
+<script>
+    const botonMostrarUsuario = document.getElementById('btn-mostrar-usuario');
+    const formularioUsuario = document.getElementById('form-crear-usuario');
+    const botonCancelarUsuario = document.getElementById('cancelar-usuario');
+
+    function mostrarFormularioUsuario(mostrar) {
+      formularioUsuario.hidden = !mostrar;
+      botonMostrarUsuario.setAttribute('aria-expanded', String(mostrar));
+    }
+
+    botonMostrarUsuario.addEventListener('click', () => {
+      mostrarFormularioUsuario(formularioUsuario.hidden);
+    });
+
+    botonCancelarUsuario.addEventListener('click', () => {
+      formularioUsuario.reset();
+      mostrarFormularioUsuario(false);
+      botonMostrarUsuario.focus();
+    });
+
+    mostrarFormularioUsuario(false);
+  </script>
+</body>
+<!--Olvidé el script que hace que esto funcione, editar código a las 2 am no es buena idea-->
 <!--Sin querer puse la versión que tenía un script en vez de la que corresponde aquí, mezclé los archivos de prueba con los del proyecto y son casi las 1 am-->
 </html>
 
