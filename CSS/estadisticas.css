@@ -35,3 +35,25 @@
     font-size: 0.85rem;
 }
 
+.chart-container {
+    margin: 0 0 1.5rem;
+    padding: 1rem;
+    background: #f7faf6;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+.chart-container figcaption { margin-bottom: 0.75rem; font-weight: 600; }
+.chart-container svg { display: block; width: 100%; min-width: 480px; overflow: visible; }
+.chart-gridline { stroke: #d8e4d9; stroke-width: 1; }
+.chart-line { fill: none; stroke: var(--color-primary); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.chart-point { fill: var(--color-primary-dark); stroke: white; stroke-width: 2; }
+.chart-label { fill: var(--color-text); font: 12px Arial, Helvetica, sans-serif; }
+.chart-empty { fill: var(--color-muted); font: 14px Arial, Helvetica, sans-serif; }
+
+@media (max-width: 600px) {
+    .control-datos, .filter-datos { align-items: stretch; flex-direction: column; }
+}
+
+/*Había olvidado escribir el estilo para el gráfico y cuando lo revisé visualmente se veía horrible :c -->
