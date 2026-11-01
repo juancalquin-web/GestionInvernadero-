@@ -10,7 +10,6 @@
 }
 
 .metric-value{
-    font-size: 0.97rem;
     font-weight: bold;
     margin-top: 0.5rem;
 }
@@ -28,10 +27,9 @@
 }
 
 .admin-table-container{
-    overflow-x: auto;
-    /*Esto permite que se ajuste la tabla si hay demasiadas cosas en el eje x de forma automática, o eso entendí al buscar comando útiles en la página de comandos que nos dió el profe*/
     margin-top: 2rem;
 }
+
 
 .admin-filter{
     margin-top: 1rem;
@@ -53,29 +51,37 @@
     border-radius: 6px;
 }
 
-.admin-table th, /*así se manipulaban las ranitas por color en Froggy Flexbox c: */
+.admin-table th, 
 .admin-table td{
-    padding: 0.75rem 1rem;
     border-bottom: 1px solid;
     text-align: center;
 }
+
 
 .admin-table th{
     font-size: 0.85rem;
 }
 
 .button-action.delete {
-    background-color: brown;
-    color:black;
+    background-color: #FCE8E6;
+    color: #8A2923;
     padding: 0.25rem 0.5rem;
+    border: 1px solid #E9B8B3;
     border-radius: 4px;
-    border: solid;
     cursor: pointer;
 }
-/* Acento terracota para diferenciar el panel de administración */
-.logo-admin {
-    color: #8c3b0d;
+
+.button-action.edit {
+    background-color: #EAF5C9;
+    color: #105C34;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #C5D98A;
+    border-radius: 4px;
+    cursor: pointer;
 }
+
+/* Acento terracota para diferenciar el panel de administración */
+
 
 .main-container > h2,
 .admin-header-actions h3,
@@ -113,4 +119,29 @@
 .admin-header-actions .button-primario:hover {
     background: #71300d;
     border-color: #71300d;
+}
+
+.user-form {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #fbf3ed;
+    border: 1px solid #d8b29a;
+    border-radius: 8px;
+}
+
+.user-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 0.75rem;
+    align-items: end;
+}
+
+.user-actions { 
+    display: flex; flex-wrap: wrap; gap: 0.5rem; 
+}
+.user-actions button { 
+    width: auto; 
+}
+.admin-table-container > h2 { 
+    color: #8c3b0d; 
 }
