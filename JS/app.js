@@ -826,6 +826,155 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 
+    //----------------------------------------------------------------------------------------------------------------------------------
+
+    // Estadísticas: gráfico y tabla de lecturas por sensor, generados desde el store.
+    Alpine.data('estadisticas', () => ({
+        sensorNombre: '',
+        limite: '10',
+
+        init() {
+            const primero = this.sensoresConLecturas[0];
+            this.sensorNombre = primero ? primero.nombre : '';
+        },
+
+        // Sensores que tienen al menos una lectura.
+        get sensoresConLecturas() {
+            const store = Alpine.store('datos');
+            const conLecturas = new Set(store.lecturas.map((l) => l.sensor));
+            return store.sensores.filter((s) => conLecturas.has(s.nombre));
+        },
+
+        get sensorActual() {
+            return this.sensoresConLecturas.find((s) => s.nombre === this.sensorNombre) || null;
+        },
+
+        get unidad() {
+            return this.sensorActual ? this.sensorActual.unidad : '';
+        },
+
+        get tituloGrafico() {
+            return this.sensorActual ? `Lecturas de ${this.sensorActual.nombre}` : 'Sin lecturas';
+        },
+
+        // Lecturas del sensor elegido, en orden cronológico, limitadas a las últimas N.
+        get lecturasGrafico() {
+            return Alpine.store('datos').lecturas
+            .filter((l) => l.sensor === this.sensorNombre)
+            .sort((a, b) => a.fecha.localeCompare(b.fecha))
+            .slice(-Number(this.limite));
+        },
+
+        // Tabla: las más recientes primero.
+        get lecturasTabla() {
+            return [...this.lecturasGrafico].reverse();
+        },
+
+        // Convierte AAAA-MM-DD a DD-MM-AAAA.
+        formatearFecha(fecha) {
+            const [anio, mes, dia] = fecha.split('-');
+            return `${dia}-${mes}-${anio}`;
+            //pensar que esto antes era un ejercicio completo evaluado en progra
+        },
+
+        // "Escapa" texto antes de insertarlo como HTML ya que alpine no lee archivos SVG
+        escapar(texto) {
+            return String(texto)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        },
+
+        // Coordenadas de cada punto dentro del viewBox 720 x 280.
+        get puntos() {
+            const datos = this.lecturasGrafico;
+            if (datos.length === 0) {
+                return [];
+            }
+
+            const valores = datos.map((l) => l.valor);
+            let min = Math.min(...valores);
+            let max = Math.max(...valores);
+            if (min === max) {
+                min -= 1;
+                max += 1;
+            }
+            const margen = (max - min) * 0.1;
+            min -= margen;
+            max += margen;
+
+            const xInicio = 60;
+            const xFin = 700;
+            const yBase = 235;
+            const yTope = 40;
+
+            return datos.map((l, i) => {
+                let x;
+                if (datos.length === 1) {
+                    x = (xInicio + xFin) / 2;
+                } 
+                else {
+                    x = xInicio + i * (xFin - xInicio) / (datos.length - 1);
+                }
+                const y = yBase - (l.valor - min) / (max - min) * (yBase - yTope);
+                const fecha = this.formatearFecha(l.fecha);
+                return {
+                    x: x.toFixed(1),
+                    y: y.toFixed(1),
+                    valor: l.valor,
+                    fecha,
+                    etiqueta: fecha.slice(0, 5)
+                };
+            });
+        },
+
+        // SVG del gráfico (se inserta con x-html; todo el texto va escapado).
+        get graficoHtml() {
+            const puntos = this.puntos;
+            if (puntos.length === 0) {
+                return '<p class="muted">No hay lecturas para este sensor.</p>';
+            }
+
+            const polilinea = puntos.map((p) => `${p.x},${p.y}`).join(' ');
+            const marcas = puntos.map((p) => `
+            <g>
+            <circle class="chart-point" cx="${p.x}" cy="${p.y}" r="5"><title>${this.escapar(p.fecha)}: ${this.escapar(p.valor)} ${this.escapar(this.unidad)}</title></circle>
+            <text class="chart-label" x="${p.x}" y="260" text-anchor="middle">${this.escapar(p.etiqueta)}</text>
+            </g>`).join('');
+
+            // Marcas del eje vertical: mínimo, punto medio y máximo, en la unidad del sensor.
+            const { min, max } = this.escala;
+            const yDe = (v) => (235 - (v - min) / (max - min) * (235 - 40)).toFixed(1);
+            const marcasY = [0, 0.5, 1].map((k) => {
+                const v = min + k * (max - min);
+                const texto = this.escapar(String(Number(v.toFixed(2))));
+                return `
+                <line class="chart-gridline" x1="60" y1="${yDe(v)}" x2="700" y2="${yDe(v)}"></line>
+                <text class="chart-label" x="52" y="${yDe(v)}" dy="4" text-anchor="end">${texto}</text>`;
+            }).join('');
+
+            const unidad = this.escapar(this.unidad);
+            let etiquetaUnidad = '';
+            if (unidad) {
+                etiquetaUnidad = ` (${unidad})`;
+            }
+
+            return `
+            <svg viewBox="0 0 720 290" role="img" aria-labelledby="titulo-grafico descripcion-grafico">
+            <desc id="descripcion-grafico">Gráfico de ${puntos.length} lecturas de ${this.escapar(this.sensorNombre)}, ordenadas cronológicamente.</desc>
+            ${marcasY}
+            <line class="chart-gridline" x1="60" y1="40" x2="60" y2="235"></line>
+            <text class="chart-label" transform="rotate(-90 14 137)" x="14" y="137" text-anchor="middle">Valor${etiquetaUnidad}</text>
+            <polyline class="chart-line" points="${polilinea}"></polyline>
+            ${marcas}
+            <text class="chart-label" x="380" y="284" text-anchor="middle">Fecha (DD-MM)</text>
+            </svg>`;
+            //horror puro, no habría puesto un gráfico de no ser por que nos lo piden
+            //quizás si lo dejaba estático pasaba piola ;-;
+        }
+    }));
 
     //Restauración de valores iniciales en los datos al cverrar sesión
 
