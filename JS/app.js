@@ -191,6 +191,48 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 
+
+    // Orden y filtro por tipo de los cultivos
+    Alpine.data('filtroCultivos', () => ({
+        filtroTipo: '',
+        orden: 'fecha-asc',
+
+        // Tipos ordenados alfabéticamente, para el selector.
+        get tipos() {
+        const tipos = Alpine.store('datos').cultivos.map((c) => c.tipo);
+        return [...new Set(tipos)].sort((a, b) => a.localeCompare(b, 'es'));
+        },
+
+        // Cultivos filtrados por tipo y ordenados por fecha (sin modificar el store).
+        get cultivosVisibles() {
+        const lista = Alpine.store('datos').cultivos
+            .filter((c) => this.filtroTipo === '' || c.tipo === this.filtroTipo);
+
+            lista.sort((a, b) => {
+                // Las fechas en formato AAAA-MM-DD se comparan bien como texto c:
+                let resultado = 0;
+                if (a.fecha < b.fecha) {
+                resultado = -1;
+                } 
+                else if (a.fecha > b.fecha) {
+                resultado = 1;
+                }
+
+                // Para orden descendente se invierte el resultado.
+                if (this.orden === 'fecha-desc') {
+                resultado = -resultado;
+                }
+                return resultado;
+            });
+        return lista;
+        },
+
+        limpiarFiltro() {
+            this.filtroTipo = '';
+        }
+    }));
+
+
     //Componente para el formulario de login.html
     //Busca el correo ingresado entre los usuarios registrados y redirige a la opágina de inicio que 
     //corresponda según su rol: admin->admin.html y usuario->dashboard.html

@@ -25,9 +25,31 @@
 </header>
 <main class="main-container" x-data>
   <h1>Mi Invernadero</h1>
-  <section class="card">
+    <section class="card" x-data="filtroCultivos()">
     <h2>Cultivos</h2>
-    <div class="table-container">
+    <div class="cultivo-controls">
+      <div>
+        <label for="filtro-tipo">Filtrar por tipo</label>
+        <select id="filtro-tipo" x-model="filtroTipo">
+          <option value="">Todos los tipos</option>
+          <template x-for="tipo in tipos" :key="tipo">
+            <option :value="tipo" x-text="tipo"></option>
+          </template>
+        </select>
+      </div>
+      <div>
+        <label for="orden-fecha">Ordenar por fecha</label>
+        <select id="orden-fecha" x-model="orden">
+          <option value="fecha-asc">Más antigua primero</option>
+          <option value="fecha-desc">Más reciente primero</option>
+        </select>
+      </div>
+    </div>
+    <p class="muted" x-show="cultivosVisibles.length === 0" role="status">
+      No hay cultivos para este filtro.
+      <button type="button" class="button-secundario" @click="limpiarFiltro()" x-show="filtroTipo !== ''">Quitar filtro</button>
+    </p>
+    <div class="table-container" x-show="cultivosVisibles.length > 0">
       <table class="tabla-cultivos">
         <thead>
           <tr>
@@ -38,7 +60,7 @@
           </tr>
         </thead>
         <tbody>
-          <template x-for="cultivo in $store.datos.cultivos" :key="cultivo.id">
+          <template x-for="cultivo in cultivosVisibles" :key="cultivo.id">
           <tr>
             <td x-text="cultivo.nombre"></td>
             <td x-text="cultivo.tipo"></td>
