@@ -63,12 +63,28 @@ document.addEventListener('alpine:init', () => {
         cambios = {};
     }
     
+    // Si no hay cambios guardados (null o indefinido), se usan los datos originales.
+    let cultivos;
+    if (cambios.cultivos != null) {
+        cultivos = cambios.cultivos;
+    } 
+    else {
+        cultivos = copiar(datosOriginales.cultivos);
+    }
+
+    let sensores;
+    if (cambios.sensores != null) {
+        sensores = cambios.sensores;
+    } 
+    else {
+        sensores = copiar(datosOriginales.sensores);
+    }
 
     Alpine.store('datos', {
         usuarios: copiar(datosOriginales.usuarios),
         lecturas: copiar(datosOriginales.lecturas),
-        cultivos: copiar(datosOriginales.cultivos),
-        sensores: copiar(datosOriginales.sensores),
+        cultivos,
+        sensores,
 
         //guardarSesion para guardar cambios de cultivos y sensores en la version de usuario en esa sesion en particular.
         guardarSesion(){
@@ -82,6 +98,30 @@ document.addEventListener('alpine:init', () => {
         cerrarSesion() {
             sessionStorage.removeItem(claveSesion);
         },
+
+        // Clase CSS e icono según el estado de un sensor (se usa en varias vistas).
+        //como la entidad html no se puede leer como string para que aparezca el logo
+        //se usa el unicode aquí.
+        visualEstado(estado) {
+            if (estado === 'Activo') {
+                return { clase: 'success-mark', icono: '\u{1F7E2}' };
+            } else if (estado === 'Mantenimiento') {
+                return { clase: 'warning-mark', icono: '\u26A0\uFE0F' };
+            } else {
+                return { clase: 'danger-mark', icono: '\u{1F534}' };
+            }
+        },
+
+        // Texto de la columna Estacional de los cultivos.
+        textoEstacional(estacional) {
+            if (estacional) {
+                return 'Si';
+            } 
+            else {
+                return 'No';
+            }
+        },
+
 
         // Siguiente id disponible de una lista.
         siguienteId(lista) {

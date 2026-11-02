@@ -19,7 +19,7 @@
       <a href="invernadero.html" class="nav-button active">Invernadero</a>
       <a href="agregar.html" class="nav-button">Agregar</a>
       <a href="estadisticas.html" class="nav-button">Estadísticas</a>
-      <a href=" ../login.html" class="nav-button button-logout">Cerrar Sesión</a>
+      <a href="../login.html" class="nav-button button-logout">Cerrar Sesión</a>
     </div>
   </nav>
 </header>
@@ -43,7 +43,7 @@
             <td x-text="cultivo.nombre"></td>
             <td x-text="cultivo.tipo"></td>
             <td x-text="cultivo.fecha"></td>
-            <td x-text="cultivo.estacional ? 'Si' : 'No'"></td>
+            <td x-text="$store.datos.textoEstacional(cultivo.estacional)"></td>
           </tr>
           </template>
         </tbody>
@@ -63,18 +63,14 @@
           </tr>
         </thead>
         <tbody>
+          <template x-for="sensor in $store.datos.sensores" :key="sensor.id">
           <tr>
-            <td>Sensor de Temperatura</td>
-            <td>Mide la temperatura ambiente del Invernadero</td>
-            <td>°C</td>
-            <td><span class="success-mark">&#x1F7E2; Activo</span></td>
+            <td x-text="sensor.nombre"></td>
+            <td x-text="sensor.descripcion"></td>
+            <td x-text="sensor.unidad"></td>
+            <td><span :class="$store.datos.visualEstado(sensor.estado).clase" x-text="$store.datos.visualEstado(sensor.estado).icono + ' ' + sensor.estado"></span></td>
           </tr>
-          <tr>
-            <td>Sensor de Humedad</td>
-            <td>Mide la humedad del aire</td>
-            <td>%</td>
-            <td><span class="success-mark">&#x1F7E2; Activo</span></td>
-          </tr>
+          </template>
         </tbody>
       </table>
     </div>
