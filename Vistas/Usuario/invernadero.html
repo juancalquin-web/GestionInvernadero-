@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../CSS/invernadero.css">
-  <link rel="stylesheet" href="../CSS/global.css">
+  <link rel="stylesheet" href="../../CSS/invernadero.css">
+  <link rel="stylesheet" href="../../CSS/global.css">
   <title>Mi Invernadero</title>
+  <script defer src="../../JS/app.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
@@ -22,7 +23,7 @@
     </div>
   </nav>
 </header>
-<main class="main-container">
+<main class="main-container" x-data>
   <h1>Mi Invernadero</h1>
   <section class="card">
     <h2>Cultivos</h2>
@@ -37,18 +38,14 @@
           </tr>
         </thead>
         <tbody>
+          <template x-for="cultivo in $store.datos.cultivos" :key="cultivo.id">
           <tr>
-            <td>Girasol</td>
-            <td>Herbácea anual</td>
-            <td>2024-03-15</td>
-            <td>Sí</td>
+            <td x-text="cultivo.nombre"></td>
+            <td x-text="cultivo.tipo"></td>
+            <td x-text="cultivo.fecha"></td>
+            <td x-text="cultivo.estacional ? 'Si' : 'No'"></td>
           </tr>
-          <tr>
-            <td>Flor de Cerezo</td>
-            <td>Árbol caducifolio</td>
-            <td>2024-07-22</td>
-            <td>Sí</td>
-          </tr>
+          </template>
         </tbody>
       </table>
     </div>
