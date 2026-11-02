@@ -976,6 +976,8 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     //Restauración de valores iniciales en los datos al cverrar sesión
 
     document.addEventListener('click', (e) => { //e de evento

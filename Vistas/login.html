@@ -27,7 +27,7 @@
                :aria-invalid="ariaInvalido('clave')" aria-describedby="error-clave">
         <p class="campo-error" id="error-clave" x-show="errores.clave" x-text="errores.clave"></p>
       </div>
-      <p class="muted" role="alert" x-show="error" x-text="error"></p>
+      <p class="error-general" role="alert" x-show="error" x-text="error"></p>
       <button type="submit" class="button-primario">Ingresar</button>
     </form>
     <div class="demo-section">

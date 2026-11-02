@@ -23,6 +23,8 @@ body {
 
 .navbar{
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
@@ -187,6 +189,7 @@ a {
 
 .nav-links{
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
 }
 
@@ -354,7 +357,7 @@ form.card button:hover {
 
 .error-message { color: #8A2923; margin: 0.25rem 0 0.75rem; }
 
-/*colores para errores*/
+/* Errores de validación de formularios (login y alta)*/
 .campo-error {
     color: #8A2923;
     font-size: 0.9rem;
