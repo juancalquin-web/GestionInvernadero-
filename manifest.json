@@ -1,0 +1,25 @@
+{
+  "name": "Gestión Invernaderos",
+  "short_name": "Invernaderos",
+  "description": "Gestión de cultivos y sensores de invernaderos.",
+  "lang": "es",
+  "start_url": "Vistas/login.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F3F8EF",
+  "theme_color": "#16834A",
+  "icons": [
+    {
+      "src": "Icons/icono-planta192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "Icons/icono-planta512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

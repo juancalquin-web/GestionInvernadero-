@@ -1,3 +1,25 @@
+(() => {
+  const raiz = new URL('../', document.currentScript.src);
+
+  const manifest = document.createElement('link');
+  manifest.rel = 'manifest';
+  manifest.href = new URL('manifest.json', raiz).href;
+  document.head.appendChild(manifest);
+
+  const colorTema = document.createElement('meta');
+  colorTema.name = 'theme-color';
+  colorTema.content = '#16834A';
+  document.head.appendChild(colorTema);
+
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    navigator.serviceWorker.register(new URL('sw.js', raiz).href)
+      .catch((err) => console.warn('No se pudo registrar el service worker:', err));
+  }
+  //en otras palabras, no funciona con fetch
+})();
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 document.addEventListener('alpine:init', () => {
 
     const claveSesion = "invernadero: sesion";
