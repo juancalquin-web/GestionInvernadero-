@@ -126,8 +126,37 @@ document.addEventListener('alpine:init', () => {
         correo: '',
         clave: '',
         error: '',
+        errores: {},
+
+        //validar() --> valida que lo que se escribe esté correcto
+        validar() {
+            this.errores = {};
+            const correo = this.correo.trim();
+
+            if (!correo) {
+                this.errores.correo = 'Ingresa tu correo electrónico.';
+            } 
+            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+                this.errores.correo = 'El correo no tiene un formato válido.';
+            }
+
+            if (!this.clave) {
+                this.errores.clave = 'Ingresa tu contraseña.';
+            } 
+            else if (this.clave.length < 4) {
+                this.errores.clave = 'La contraseña debe tener al menos 4 caracteres.';
+            }
+
+            return Object.keys(this.errores).length === 0;
+    },
 
         ingresar() {
+            this.error = '';
+            if (!this.validar()) {
+                return;
+            }
+
+
             const correo = this.correo.trim().toLowerCase(); //para que si se escribe en mayúsculas igual funcione
             const usuario = Alpine.store('datos').usuarios.find(
                 (u) => u.correo.toLowerCase() === correo && u.clave === this.clave //u de usuario
