@@ -10,6 +10,19 @@
     white-space: nowrap;
 }
 
+.campo-error {
+    display: block;
+    color: #8A2923;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.mensaje-exito {
+    color: #1F5E2A;
+    font-weight: 600;
+}
+
+
 .action-button {
     margin: 0.15rem;
     padding: 0.4rem 0.65rem;

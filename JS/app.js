@@ -146,16 +146,48 @@ document.addEventListener('alpine:init', () => {
 
         //sensor, usuarioId es provisorio hasta tener sesión real.
         agregarSensor({ nombre, descripcion, unidad, estado = 'Activo', usuarioId = 1 }) {
-        const sensor = {
-            id: this.siguienteId(this.sensores),
-            usuarioId,
-            nombre,
-            descripcion,
-            unidad,
-            estado
-        };
-        this.sensores.push(sensor);
-        return sensor;
+            const sensor = {
+                id: this.siguienteId(this.sensores),
+                usuarioId,
+                nombre,
+                descripcion,
+                unidad,
+                estado
+            };
+            this.sensores.push(sensor);
+            return sensor;
+        },
+
+        // Actualiza un cultivo existente (temporal).
+        actualizarCultivo(id, datos) {
+            const cultivo = this.cultivos.find((c) => c.id === id);
+            if (cultivo) {
+                Object.assign(cultivo, datos);
+                this.guardarSesion();
+            }
+            return cultivo;
+        },
+
+        // Elimina un cultivo (temporal).
+        eliminarCultivo(id) {
+            this.cultivos = this.cultivos.filter((c) => c.id !== id);
+            this.guardarSesion();
+        },
+
+        // Actualiza un sensor existente (temporal).
+        actualizarSensor(id, datos) {
+            const sensor = this.sensores.find((s) => s.id === id);
+            if (sensor) {
+                Object.assign(sensor, datos);
+                this.guardarSesion();
+            }
+            return sensor;
+        },
+
+        // Elimina un sensor (temporal).
+        eliminarSensor(id) {
+            this.sensores = this.sensores.filter((s) => s.id !== id);
+            this.guardarSesion();
         }
     });
 
@@ -229,8 +261,152 @@ document.addEventListener('alpine:init', () => {
 
         limpiarFiltro() {
             this.filtroTipo = '';
+        },
+
+        // Edición de cultivos: el formulario se muestra bajo la tabla.
+        cultivoEditandoId: null,
+        formCultivo: { nombre: '', tipo: '', fecha: '', estacional: false },
+        erroresCultivo: {},
+        mensajeCultivo: '',
+
+        iniciarEdicion(cultivo) {
+            this.cultivoEditandoId = cultivo.id;
+            this.formCultivo = {
+                nombre: cultivo.nombre,
+                tipo: cultivo.tipo,
+                fecha: cultivo.fecha,
+                estacional: cultivo.estacional
+        };
+        this.erroresCultivo = {};
+        this.mensajeCultivo = '';
+        },
+
+        cancelarEdicion() {
+        this.cultivoEditandoId = null;
+        this.erroresCultivo = {};
+        },
+
+        validarEdicion() {
+        const c = this.formCultivo;
+        const errores = {};
+
+        if (!c.nombre.trim()) {
+            errores.nombre = 'Ingresa el nombre del cultivo.';
+        }
+        if (!c.tipo.trim()) {
+            errores.tipo = 'Ingresa el tipo de cultivo (por ejemplo, Flor o Alimentario).';
+        }
+        if (!c.fecha) {
+            errores.fecha = 'Selecciona la fecha de cultivo.';
+        }
+
+        this.erroresCultivo = errores;
+        return Object.keys(errores).length === 0;
+        },
+
+        guardarEdicion() {
+        this.mensajeCultivo = '';
+        if (!this.validarEdicion()) {
+            return;
+        }
+        const nombre = this.formCultivo.nombre.trim();
+        Alpine.store('datos').actualizarCultivo(this.cultivoEditandoId, {
+            nombre,
+            tipo: this.formCultivo.tipo.trim(),
+            fecha: this.formCultivo.fecha,
+            estacional: this.formCultivo.estacional
+        });
+        this.mensajeCultivo = `Cultivo "${nombre}" actualizado.`;
+        this.cancelarEdicion();
+        },
+
+        // Pide confirmación antes de borrar.
+        eliminarCultivo(cultivo) {
+            const confirmar = window.confirm(`¿Eliminar el cultivo "${cultivo.nombre}"? Esta acción no se puede deshacer.`);
+            if (!confirmar) {
+                return;
+            }
+            if (this.cultivoEditandoId === cultivo.id) {
+                this.cancelarEdicion();
+            }
+            Alpine.store('datos').eliminarCultivo(cultivo.id);
+            this.mensajeCultivo = `Cultivo "${cultivo.nombre}" eliminado.`;
         }
     }));
+
+    // Edición y eliminación de sensores (simulada). El nombre no se
+    // cambia porque las lecturas se relacionan con el sensor por ese nombre.
+    Alpine.data('edicionSensores', () => ({
+        sensorEditandoId: null,
+        nombreSensor: '',
+        formSensor: { descripcion: '', unidad: '', estado: 'Activo' },
+        erroresSensor: {},
+        mensajeSensor: '',
+
+        iniciarEdicion(sensor) {
+            this.sensorEditandoId = sensor.id;
+            this.nombreSensor = sensor.nombre;
+            this.formSensor = {
+                descripcion: sensor.descripcion,
+                unidad: sensor.unidad,
+                estado: sensor.estado
+            };
+        this.erroresSensor = {};
+        this.mensajeSensor = '';
+        },
+
+        cancelarEdicion() {
+            this.sensorEditandoId = null;
+            this.erroresSensor = {};
+        },
+
+        validarEdicion() {
+            const s = this.formSensor;
+            const errores = {};
+
+            if (!s.descripcion.trim()) {
+                errores.descripcion = 'Ingresa una descripción del sensor.';
+            }
+            if (!s.unidad.trim()) {
+                errores.unidad = 'Ingresa la unidad que mide el sensor (por ejemplo, °C o pH).';
+            }
+
+            this.erroresSensor = errores;
+            return Object.keys(errores).length === 0;
+        },
+
+        guardarEdicion() {
+            this.mensajeSensor = '';
+             if (!this.validarEdicion()) {
+                return;
+            }
+            Alpine.store('datos').actualizarSensor(this.sensorEditandoId, {
+                descripcion: this.formSensor.descripcion.trim(),
+                unidad: this.formSensor.unidad.trim(),
+                estado: this.formSensor.estado
+            });
+            this.mensajeSensor = `Sensor "${this.nombreSensor}" actualizado.`;
+            this.cancelarEdicion();
+        },
+
+        // Pide confirmación antes de borrar.
+        eliminarSensor(sensor) {
+        const confirmar = window.confirm(`¿Eliminar el sensor "${sensor.nombre}"? Esta acción no se puede deshacer.`);
+        if (!confirmar) {
+            return;
+        }
+        if (this.sensorEditandoId === sensor.id) {
+            this.cancelarEdicion();
+        }
+        Alpine.store('datos').eliminarSensor(sensor.id);
+        this.mensajeSensor = `Sensor "${sensor.nombre}" eliminado.`;
+        }
+    }));
+    //Comienzo a pensar que estamos haciendo algo que no nos pedían,
+    //eso o es normal tener tantas líneas en un archivo js
+    //...no, creo que es lo normal
+    //el profe mostró algo similar el viernes pasado y era súper largo
+    //Hace sueño =-=
 
 
     //Componente para el formulario de login.html
