@@ -178,6 +178,96 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 
+    // Componente para el formulario de cultivo y sensor.
+    //Valida los campos y guarda el registro en el store.
+    Alpine.data('crearRegistro', () => ({
+        tipo: 'cultivo',
+        exito: '',
+        errores: {},
+        cultivo: { nombre: '', tipo: '', fecha: '', estacional: false },
+        sensor: { nombre: '', descripcion: '', unidad: '', estado: 'Activo' },
+
+        // Al cambiar de formulario se limpian errores y mensajes anteriores.
+        cambiarTipo() {
+        this.errores = {};
+        this.exito = '';
+        },
+
+        validarCultivo() {
+        const c = this.cultivo; //c de cultivo
+        const errores = {};
+
+        if (!c.nombre.trim()) {
+            errores.nombre = 'Ingresa el nombre del cultivo.';
+        }
+        if (!c.tipo.trim()) {
+            errores.tipo = 'Ingresa el tipo de cultivo (por ejemplo, Flor o Alimentario).';
+        }
+        if (!c.fecha) {
+            errores.fecha = 'Selecciona la fecha de cultivo.';
+        }
+
+        this.errores = errores;
+        return Object.keys(errores).length === 0;
+        },
+
+        validarSensor() {
+        const s = this.sensor; //s de sensor
+        const nombre = s.nombre.trim();
+        const errores = {};
+
+        if (!nombre) {
+            errores.nombre = 'Ingresa el nombre del sensor.';
+        } else if (!/^[A-Za-z0-9_]+$/.test(nombre)) {
+            errores.nombre = 'Usa solo letras, números y guion bajo (_). Ejemplo: Juan_Temperatura_2.';
+        } else if (Alpine.store('datos').sensores.some((x) => x.nombre.toLowerCase() === nombre.toLowerCase())) {
+            errores.nombre = 'Ya existe un sensor con ese nombre. Elige otro.';
+        }
+        if (!s.descripcion.trim()) {
+            errores.descripcion = 'Ingresa una descripción del sensor.';
+        }
+        if (!s.unidad.trim()) {
+            errores.unidad = 'Ingresa la unidad que mide el sensor (por ejemplo, °C o pH).';
+        }
+
+        this.errores = errores;
+        return Object.keys(errores).length === 0;
+        },
+
+        enviarCultivo() {
+        this.exito = '';
+        if (!this.validarCultivo()) {
+            return;
+        }
+        const nombre = this.cultivo.nombre.trim();
+        Alpine.store('datos').agregarCultivo({
+            nombre,
+            tipo: this.cultivo.tipo.trim(),
+            fecha: this.cultivo.fecha,
+            estacional: this.cultivo.estacional
+        });
+        this.cultivo = { nombre: '', tipo: '', fecha: '', estacional: false };
+        this.exito = `Cultivo "${nombre}" creado.`;
+        },
+
+        enviarSensor() {
+        this.exito = '';
+        if (!this.validarSensor()) {
+            return;
+        }
+        const nombre = this.sensor.nombre.trim();
+        Alpine.store('datos').agregarSensor({
+            nombre,
+            descripcion: this.sensor.descripcion.trim(),
+            unidad: this.sensor.unidad.trim(),
+            estado: this.sensor.estado
+        });
+        this.sensor = { nombre: '', descripcion: '', unidad: '', estado: 'Activo' };
+        this.exito = `Sensor "${nombre}" creado.`;
+        }
+    }));
+
+
     //Restauración de valores iniciales en los datos al cverrar sesión
 
     document.addEventListener('click', (e) => { //e de evento

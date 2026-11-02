@@ -354,7 +354,7 @@ form.card button:hover {
 
 .error-message { color: #8A2923; margin: 0.25rem 0 0.75rem; }
 
-/* Errores de validación de formularios (login y alta). Contraste sobre blanco ≈ 8:1. */
+/*colores para errores*/
 .campo-error {
     color: #8A2923;
     font-size: 0.9rem;

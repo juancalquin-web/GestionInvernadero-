@@ -19,45 +19,73 @@
       <a href="invernadero.html" class="nav-button">Invernadero</a>
       <a href="agregar.html" class="nav-button active">Agregar</a>
       <a href="estadisticas.html" class="nav-button">Estadísticas</a>
-      <a href="login.html" class="nav-button button-logout">Cerrar Sesión</a>
+      <a href="../login.html" class="nav-button button-logout">Cerrar Sesión</a>
     </div>
   </nav>
 </header>
-<main class="main-container">
+<main class="main-container" x-data="crearRegistro()">
   <h1>Crear nuevo registro</h1>
 
   <section class="card">
     <label for="tipo">¿Qué deseas crear?</label>
-    <select id="tipo">
+    <select id="tipo" x-model="tipo" @change="cambiarTipo()">
       <option value="cultivo">Cultivo</option>
       <option value="sensor">Sensor</option>
     </select>
   </section>
 
-  <form id="formCultivo" class="card">
-    <label for="nombreCultivo">Nombre</label>
-    <input id="nombreCultivo" type="text" maxlength="80" required>
-    <label for="tipoCultivo">Tipo de cultivo</label>
-    <input id="tipoCultivo" type="text" maxlength="60" required>
-    <label for="fecha">Fecha de cultivo</label>
-    <input id="fecha" type="date" required>
-    <label class="checkbox-field"><input type="checkbox"> Es estacional</label>
+  <p class="success-mark" role="status" x-show="exito" x-text="exito"></p>
+
+  <form id="formCultivo" class="card" x-show="tipo === 'cultivo'" x-cloak novalidate @submit.prevent="enviarCultivo()">
+    <div>
+      <label for="nombreCultivo">Nombre</label>
+      <input id="nombreCultivo" type="text" maxlength="80" x-model="cultivo.nombre" required
+             :aria-invalid="ariaInvalido(erroresCultivo, 'nombre')" aria-describedby="error-nombreCultivo">
+      <p class="campo-error" id="error-nombreCultivo" x-show="erroresCultivo.nombre" x-text="erroresCultivo.nombre"></p>
+    </div>
+    <div>
+      <label for="tipoCultivo">Tipo de cultivo</label>
+      <input id="tipoCultivo" type="text" maxlength="60" x-model="cultivo.tipo" required
+             :aria-invalid="ariaInvalido(erroresCultivo, 'tipo')" aria-describedby="error-tipoCultivo">
+      <p class="campo-error" id="error-tipoCultivo" x-show="erroresCultivo.tipo" x-text="erroresCultivo.tipo"></p>
+    </div>
+    <div>
+      <label for="fecha">Fecha de cultivo</label>
+      <input id="fecha" type="date" x-model="cultivo.fecha" required
+             :aria-invalid="ariaInvalido(erroresCultivo, 'fecha')" aria-describedby="error-fecha">
+      <p class="campo-error" id="error-fecha" x-show="erroresCultivo.fecha" x-text="erroresCultivo.fecha"></p>
+    </div>
+    <label class="checkbox-field"><input type="checkbox" x-model="cultivo.estacional"> Es estacional</label>
     <button type="submit" class="button-primario">Crear registro</button>
   </form>
 
-  <form id="formSensor" class="card" hidden>
-    <label for="nombreSensor">Nombre</label>
-    <input id="nombreSensor" type="text" maxlength="80" required>
-    <label for="descripcion">Descripción</label>
-    <input id="descripcion" type="text" maxlength="160" required>
-    <label for="unidad">Unidad</label>
-    <input id="unidad" type="text" maxlength="30" required>
-    <label for="estado">Estado</label>
-    <select id="estado">
-      <option>Activo</option>
-      <option>Mantenimiento</option>
-      <option>Desconectado</option>
-    </select>
+  <form id="formSensor" class="card" x-show="tipo === 'sensor'" x-cloak novalidate @submit.prevent="enviarSensor()">
+    <div>
+      <label for="nombreSensor">Nombre</label>
+      <input id="nombreSensor" type="text" maxlength="80" x-model="sensor.nombre" required
+             :aria-invalid="ariaInvalido(erroresSensor, 'nombre')" aria-describedby="error-nombreSensor">
+      <p class="campo-error" id="error-nombreSensor" x-show="erroresSensor.nombre" x-text="erroresSensor.nombre"></p>
+    </div>
+    <div>
+      <label for="descripcion">Descripción</label>
+      <input id="descripcion" type="text" maxlength="160" x-model="sensor.descripcion" required
+             :aria-invalid="ariaInvalido(erroresSensor, 'descripcion')" aria-describedby="error-descripcion">
+      <p class="campo-error" id="error-descripcion" x-show="erroresSensor.descripcion" x-text="erroresSensor.descripcion"></p>
+    </div>
+    <div>
+      <label for="unidad">Unidad</label>
+      <input id="unidad" type="text" maxlength="30" x-model="sensor.unidad" required
+             :aria-invalid="ariaInvalido(erroresSensor, 'unidad')" aria-describedby="error-unidad">
+      <p class="campo-error" id="error-unidad" x-show="erroresSensor.unidad" x-text="erroresSensor.unidad"></p>
+    </div>
+    <div>
+      <label for="estado">Estado</label>
+      <select id="estado" x-model="sensor.estado">
+        <option>Activo</option>
+        <option>Mantenimiento</option>
+        <option>Desconectado</option>
+      </select>
+    </div>
     <button type="submit" class="button-primario">Crear registro</button>
   </form>
 </main>
