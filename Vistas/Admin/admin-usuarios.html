@@ -11,26 +11,25 @@
 </head>
 <body>
 <header class="navbar">
-  <a href="admin.html" class="logo logo-admin">&#x1FAB4; &#x1F6E1;&#xFE0F; Gestión Invernaderos</a>
+    <a href="admin.html" class="logo logo-admin">&#x1FAB4; &#x1F6E1;&#xFE0F; Gestión Invernaderos</a>
   <nav class="navbar-navigation" aria-label="Navegación principal">
-    <input type="checkbox" id="menu-toggle" class="menu-toggle"><label for="menu-toggle" class="menu-toggle-label">☰ Menú</label>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle"><label for="menu-toggle" class="menu-toggle-label">&#x2630; Menú</label>
     <div class="nav-links">
       <a href="admin.html" class="nav-button">Inicio Administrador</a>
       <a href="admin-usuarios.html" class="nav-button active">Usuarios</a>
       <a href="admin-invernaderos.html" class="nav-button">Invernaderos</a>
-      <a href=" ../login.html" class="nav-button button-logout">Cerrar Sesión</a>
+      <a href="../login.html" class="nav-button button-logout">Cerrar Sesión</a>
     </div>
   </nav>
 </header>
-<main class="main-container">
+<main class="main-container" x-data>
   <h1>Gestión de usuarios</h1>
   <section class="card admin-table-container">
     <div class="admin-header-actions">
-      <h2>👥 Usuarios del sistema</h2>
-      <button type="button" class="button button-primario">+ Crear nuevo usuario</button>
+      <h2>&#x1F465; Usuarios del sistema</h2>
+      <button type="button" class="button button-primario" id="btn-mostrar-usuario" aria-expanded="false" aria-controls="form-crear-usuario">+ Crear nuevo usuario</button>
     </div>
-
-    <form class="user-form">
+    <form class="user-form" id="form-crear-usuario" hidden>
       <h3>Crear usuario de demostración</h3>
       <div class="user-fields">
         <label for="user-name">Nombre
@@ -41,7 +40,7 @@
         </label>
         <div class="user-actions">
           <button class="button-primario" type="submit">Crear usuario</button>
-          <button type="button">Cancelar</button>
+          <button type="button" id="cancelar-usuario">Cancelar</button>
         </div>
       </div>
     </form>
@@ -52,27 +51,16 @@
           <tr><th>Usuario</th><th>Correo</th><th>Cultivos</th><th>Sensores</th><th>Acciones</th></tr>
         </thead>
         <tbody>
+          <template x-for="usuario in $store.datos.usuarios" :key="usuario.id">
           <tr>
-            <td>Juan Calquín</td>
-            <td>juan@ejemplo.com</td>
-            <td>2</td>
-            <td>3</td>
+            <td x-text="usuario.nombre"></td>
+            <td x-text="usuario.correo"></td>
+            <td x-text="$store.datos.cultivos.filter((c) => c.usuarioId === usuario.id).length"></td> <!--c de cultivo-->
+            <td x-text="$store.datos.sensores.filter((s) => s.usuarioId === usuario.id).length"></td> <!--s de sensor-->
+            <!--Ahora se calculan los cultivos y sensores desde los datosd-->
             <td><button type="button" class="button-action edit">Editar</button> <button type="button" class="button-action delete">Eliminar</button></td>
           </tr>
-          <tr>
-            <td>Paulina González</td>
-            <td>paulina@ejemplo.com</td>
-            <td>3</td>
-            <td>4</td>
-            <td><button type="button" class="button-action edit">Editar</button> <button type="button" class="button-action delete">Eliminar</button></td>
-          </tr>
-          <tr>
-            <td>Diego Guzmán</td>
-            <td>diego@ejemplo.com</td>
-            <td>2</td>
-            <td>2</td>
-            <td><button type="button" class="button-action edit">Editar</button> <button type="button" class="button-action delete">Eliminar</button></td>
-          </tr>
+          </template>
         </tbody>
       </table>
     </div>
