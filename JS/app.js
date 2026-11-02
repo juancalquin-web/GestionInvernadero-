@@ -159,6 +159,38 @@ document.addEventListener('alpine:init', () => {
         }
     });
 
+    // Resumen del dashboard: todos los números se calculan desde el store.
+    Alpine.data('resumen', () => ({
+        contarSensores(estado) {
+            return Alpine.store('datos').sensores.filter((s) => s.estado === estado).length; //s de sensor 
+        },
+
+        get cultivosRegistrados() {
+            return Alpine.store('datos').cultivos.length;
+        },
+
+        get sensoresActivos() {
+            return this.contarSensores('Activo');
+        },
+
+        get sensoresMantenimiento() {
+            return this.contarSensores('Mantenimiento');
+        },
+
+        get sensoresDesconectados() {
+            return this.contarSensores('Desconectado');
+        },
+
+        get datosRecolectados() {
+            return Alpine.store('datos').lecturas.length;
+        },
+
+        // Sensores que no están activos se muestran como alertas. !!(O^O)
+        get alertas() {
+            return Alpine.store('datos').sensores.filter((s) => s.estado !== 'Activo');
+        }
+    }));
+
     //Componente para el formulario de login.html
     //Busca el correo ingresado entre los usuarios registrados y redirige a la opágina de inicio que 
     //corresponda según su rol: admin->admin.html y usuario->dashboard.html
@@ -188,7 +220,17 @@ document.addEventListener('alpine:init', () => {
             }
 
             return Object.keys(this.errores).length === 0;
-    },
+        },
+
+        // Devuelve 'true' o 'false' para aria-invalid, según si el campo tiene error.
+        ariaInvalido(campo) {
+            if (this.errores[campo]) {
+                return 'true';
+            } 
+            else {
+                return 'false';
+            }
+        },
 
         ingresar() {
             this.error = '';
@@ -252,58 +294,60 @@ document.addEventListener('alpine:init', () => {
         },
 
         validarSensor() {
-        const s = this.sensor; //s de sensor
-        const nombre = s.nombre.trim();
-        const errores = {};
+            const s = this.sensor; //s de sensor
+            const nombre = s.nombre.trim();
+            const errores = {};
 
-        if (!nombre) {
-            errores.nombre = 'Ingresa el nombre del sensor.';
-        } else if (!/^[A-Za-z0-9_]+$/.test(nombre)) {
-            errores.nombre = 'Usa solo letras, números y guion bajo (_). Ejemplo: Juan_Temperatura_2.';
-        } else if (Alpine.store('datos').sensores.some((x) => x.nombre.toLowerCase() === nombre.toLowerCase())) {
-            errores.nombre = 'Ya existe un sensor con ese nombre. Elige otro.';
-        }
-        if (!s.descripcion.trim()) {
-            errores.descripcion = 'Ingresa una descripción del sensor.';
-        }
-        if (!s.unidad.trim()) {
-            errores.unidad = 'Ingresa la unidad que mide el sensor (por ejemplo, °C o pH).';
-        }
+            if (!nombre) {
+                errores.nombre = 'Ingresa el nombre del sensor.';
+            } 
+            else if (!/^[A-Za-z0-9_]+$/.test(nombre)) {
+                errores.nombre = 'Usa solo letras, números y guion bajo (_). Ejemplo: Juan_Temperatura_2.';
+            } 
+            else if (Alpine.store('datos').sensores.some((x) => x.nombre.toLowerCase() === nombre.toLowerCase())) {
+                errores.nombre = 'Ya existe un sensor con ese nombre. Elige otro.';
+            }
+            if (!s.descripcion.trim()) {
+                errores.descripcion = 'Ingresa una descripción del sensor.';
+            }
+            if (!s.unidad.trim()) {
+                errores.unidad = 'Ingresa la unidad que mide el sensor (por ejemplo, °C o pH).';
+            }
 
-        this.errores = errores;
-        return Object.keys(errores).length === 0;
-        },
+            this.errores = errores;
+            return Object.keys(errores).length === 0;
+            },
 
         enviarCultivo() {
-        this.exito = '';
-        if (!this.validarCultivo()) {
-            return;
-        }
-        const nombre = this.cultivo.nombre.trim();
-        Alpine.store('datos').agregarCultivo({
-            nombre,
-            tipo: this.cultivo.tipo.trim(),
-            fecha: this.cultivo.fecha,
-            estacional: this.cultivo.estacional
-        });
-        this.cultivo = { nombre: '', tipo: '', fecha: '', estacional: false };
-        this.exito = `Cultivo "${nombre}" creado.`;
+            this.exito = '';
+            if (!this.validarCultivo()) {
+                return;
+            }
+            const nombre = this.cultivo.nombre.trim();
+            Alpine.store('datos').agregarCultivo({
+                nombre,
+                tipo: this.cultivo.tipo.trim(),
+                fecha: this.cultivo.fecha,
+                estacional: this.cultivo.estacional
+            });
+            this.cultivo = { nombre: '', tipo: '', fecha: '', estacional: false };
+            this.exito = `Cultivo "${nombre}" creado.`;
         },
 
         enviarSensor() {
-        this.exito = '';
-        if (!this.validarSensor()) {
-            return;
-        }
-        const nombre = this.sensor.nombre.trim();
-        Alpine.store('datos').agregarSensor({
-            nombre,
-            descripcion: this.sensor.descripcion.trim(),
-            unidad: this.sensor.unidad.trim(),
-            estado: this.sensor.estado
-        });
-        this.sensor = { nombre: '', descripcion: '', unidad: '', estado: 'Activo' };
-        this.exito = `Sensor "${nombre}" creado.`;
+            this.exito = '';
+            if (!this.validarSensor()) {
+                return;
+            }
+            const nombre = this.sensor.nombre.trim();
+            Alpine.store('datos').agregarSensor({
+                nombre,
+                descripcion: this.sensor.descripcion.trim(),
+                unidad: this.sensor.unidad.trim(),
+                estado: this.sensor.estado
+            });
+            this.sensor = { nombre: '', descripcion: '', unidad: '', estado: 'Activo' };
+            this.exito = `Sensor "${nombre}" creado.`;
         }
     }));
 

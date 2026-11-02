@@ -23,25 +23,28 @@
     </div>
   </nav>
 </header>
-<main class="main-container">
+<main class="main-container" x-data="resumen">
   <h1>Resumen del Invernadero</h1>
   <div class="dashboard-grid">
-    <article class="card metric-card"><h2>Cultivos registrados</h2><p class="metric-value">3</p></article>
-    <article class="card metric-card"><h2>Sensores activos</h2><p class="metric-value">3</p></article>
-    <article class="card metric-card"><h2>Datos recolectados</h2><p class="metric-value">1209</p></article>
+    <article class="card metric-card"><h2>Cultivos registrados</h2><p class="metric-value" x-text="cultivosRegistrados"></p></article>
+    <article class="card metric-card"><h2>Sensores activos</h2><p class="metric-value" x-text="sensoresActivos"></p></article>
+    <article class="card metric-card"><h2>Datos recolectados</h2><p class="metric-value" x-text="datosRecolectados"></p></article>
   </div>
   <section class="card sensor-summary" aria-labelledby="sensor-summary-title">
     <h2 id="sensor-summary-title">Estado de los sensores</h2>
     <div class="sensor-status-grid">
-      <div class="sensor-status-item"><span>Activos</span><strong class="success-mark">&#x1F7E2; 3</strong></div>
-      <div class="sensor-status-item"><span>En mantenimiento</span><strong class="warning-mark">&#x26A0;&#xFE0F; 1</strong></div>
-      <div class="sensor-status-item"><span>Desconectados</span><strong class="danger-mark">&#x1F534; 0</strong></div>
+      <div class="sensor-status-item"><span>Activos</span><strong class="success-mark" x-text="'&#x1F7E2; ' + sensoresActivos"></strong></div>
+      <div class="sensor-status-item"><span>En mantenimiento</span><strong class="warning-mark" x-text="'&#x26A0;&#xFE0F; ' + sensoresMantenimiento"></strong></div>
+      <div class="sensor-status-item"><span>Desconectados</span><strong class="danger-mark" x-text="'&#x1F534; ' + sensoresDesconectados"></strong></div>
     </div>
   </section>
   <section class="card sensor-alerts" aria-labelledby="sensor-alerts-title">
     <h2 id="sensor-alerts-title">Alertas</h2>
     <div class="alerts-grid">
-      <p class="alert-item"><span class="danger-mark">&#x1F534; Alerta Crítica</span> Temperatura_Zona_1: 35 °C</p>
+      <template x-for="sensor in alertas" :key="sensor.id">
+        <p class="alert-item"><span :class="$store.datos.visualEstado(sensor.estado).clase" x-text="$store.datos.visualEstado(sensor.estado).icono + ' ' + sensor.estado"></span> <span x-text="sensor.nombre"></span></p>
+      </template>
+      <p class="alert-item" x-show="alertas.length === 0">No hay alertas: todos los sensores están activos.</p>
     </div>
   </section>
   <section class="card">
