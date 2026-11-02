@@ -188,6 +188,43 @@ document.addEventListener('alpine:init', () => {
         eliminarSensor(id) {
             this.sensores = this.sensores.filter((s) => s.id !== id);
             this.guardarSesion();
+        },
+
+        // Alta de usuario (temporal). La clave inicial es 1234 y el rol, usuario.
+        agregarUsuario({ nombre, correo, clave = '1234', rol = 'usuario' }) {
+            const usuario = {
+                id: this.siguienteId(this.usuarios),
+                nombre,
+                correo,
+                clave,
+                rol
+            };
+            this.usuarios.push(usuario);
+            this.guardarSesion();
+            return usuario;
+        },
+
+        // Actualiza nombre y correo de un usuario (temporal). La clave y el rol no cambian.
+        actualizarUsuario(id, datos) {
+            const usuario = this.usuarios.find((u) => u.id === id);
+            if (usuario) {
+                Object.assign(usuario, datos);
+                this.guardarSesion();
+            }
+            return usuario;
+        },
+
+        // Elimina un usuario y, en cascada, sus cultivos, sensores y las lecturas de esos sensores.
+        eliminarUsuario(id) {
+            const nombresSensores = this.sensores
+                .filter((s) => s.usuarioId === id)
+                .map((s) => s.nombre);
+
+            this.usuarios = this.usuarios.filter((u) => u.id !== id);
+            this.cultivos = this.cultivos.filter((c) => c.usuarioId !== id);
+            this.sensores = this.sensores.filter((s) => s.usuarioId !== id);
+            this.lecturas = this.lecturas.filter((l) => !nombresSensores.includes(l.sensor));
+            this.guardarSesion();
         }
     });
 
@@ -223,6 +260,31 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 
+    // Métricas del panel de administración. Usan las mismas definiciones que el
+    // dashboard del usuario (cultivos, sensores y lecturas), para que los conteos coincidan.
+    Alpine.data('resumenAdmin', () => ({
+        get totalUsuarios() {
+            // Se cuentan solo los usuarios con rol "usuario" (el administrador no tiene invernadero).
+            return Alpine.store('datos').usuarios.filter((u) => u.rol !== 'admin').length;
+        },
+
+        // Cada usuario con rol "usuario" tiene un invernadero. No he pensado qué hacer si quisieran más de uno O-o
+        get cantidadInvernaderos() {
+            return this.totalUsuarios;
+        },
+
+        get totalCultivos() {
+            return Alpine.store('datos').cultivos.length;
+        },
+
+        get totalSensores() {
+            return Alpine.store('datos').sensores.length;
+        },
+
+        get datosRecolectados() {
+            return Alpine.store('datos').lecturas.length;
+        }
+    }));
 
     // Orden y filtro por tipo de los cultivos
     Alpine.data('filtroCultivos', () => ({
@@ -408,7 +470,202 @@ document.addEventListener('alpine:init', () => {
     //el profe mostró algo similar el viernes pasado y era súper largo
     //Hace sueño =-=
 
+    // Administración de usuarios: listado con conteos, eliminación con confirmación
+    // y alta de usuario nuevo (todo simulado sobre el store).
+    Alpine.data('adminUsuarios', () => ({
+        mostrarForm: false,
+        nuevo: { nombre: '', correo: '' },
+        erroresUsuario: {},
+        mensajeUsuario: '',
 
+        // Edición de usuarios: el formulario se muestra bajo la tabla.
+        editandoId: null,
+        nombreEditando: '',
+        formEditar: { nombre: '', correo: '' },
+        erroresEditar: {},
+
+        contarCultivos(usuarioId) {
+            return Alpine.store('datos').cultivos.filter((c) => c.usuarioId === usuarioId).length;
+        },
+
+        contarSensores(usuarioId) {
+            return Alpine.store('datos').sensores.filter((s) => s.usuarioId === usuarioId).length;
+        },
+
+        abrirFormulario() {
+            this.cancelarEdicion();
+            this.mostrarForm = true;
+            this.mensajeUsuario = '';
+        },
+
+        cancelarAlta() {
+            this.mostrarForm = false;
+            this.nuevo = { nombre: '', correo: '' };
+            this.erroresUsuario = {};
+        },
+
+        validarAlta() {
+            const nombre = this.nuevo.nombre.trim();
+            const correo = this.nuevo.correo.trim();
+            const errores = {};
+
+            if (!nombre) {
+                errores.nombre = 'Ingresa el nombre del usuario.';
+            }
+
+            if (!correo) {
+                errores.correo = 'Ingresa el correo electrónico del usuario.';
+            } 
+            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+                errores.correo = 'El correo no tiene un formato válido.';
+            } 
+            else if (Alpine.store('datos').usuarios.some((u) => u.correo.toLowerCase() === correo.toLowerCase())) {
+                errores.correo = 'Ya existe un usuario con ese correo.';
+            }
+            this.erroresUsuario = errores;
+            return Object.keys(errores).length === 0;
+        },
+
+        crearUsuario() {
+            this.mensajeUsuario = '';
+            if (!this.validarAlta()) {
+                return;
+            }
+            const nombre = this.nuevo.nombre.trim();
+            const correo = this.nuevo.correo.trim();
+            Alpine.store('datos').agregarUsuario({ nombre, correo });
+                this.mensajeUsuario = `Usuario "${nombre}" creado. Su clave inicial es 1234.`;
+                this.cancelarAlta();
+        },
+
+        iniciarEdicion(usuario) {
+            this.cancelarAlta();
+            this.editandoId = usuario.id;
+            this.nombreEditando = usuario.nombre;
+            this.formEditar = { nombre: usuario.nombre, correo: usuario.correo };
+            this.erroresEditar = {};
+            this.mensajeUsuario = '';
+        },
+
+        cancelarEdicion() {
+            this.editandoId = null;
+            this.erroresEditar = {};
+        },
+
+        validarEdicion() {
+            const nombre = this.formEditar.nombre.trim();
+            const correo = this.formEditar.correo.trim();
+            const errores = {};
+
+            if (!nombre) {
+                errores.nombre = 'Ingresa el nombre del usuario.';
+            }
+
+            if (!correo) {
+                errores.correo = 'Ingresa el correo electrónico del usuario.';
+            } 
+            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+                errores.correo = 'El correo no tiene un formato válido.';
+            } 
+            else if (Alpine.store('datos').usuarios.some((u) => u.id !== this.editandoId && u.correo.toLowerCase() === correo.toLowerCase())) {
+                errores.correo = 'Ya existe otro usuario con ese correo.';
+            }
+
+            this.erroresEditar = errores;
+            return Object.keys(errores).length === 0;
+        },
+
+        guardarEdicion() {
+            this.mensajeUsuario = '';
+            if (!this.validarEdicion()) {
+                return;
+            }
+            const nombre = this.formEditar.nombre.trim();
+            const correo = this.formEditar.correo.trim();
+            Alpine.store('datos').actualizarUsuario(this.editandoId, { nombre, correo });
+                this.mensajeUsuario = `Usuario "${nombre}" actualizado.`;
+                this.cancelarEdicion();
+        },
+
+        // Pide confirmación antes de borrar. El administrador no se puede eliminar.
+        eliminarUsuario(usuario) {
+            if (usuario.rol === 'admin') {
+                this.mensajeUsuario = 'No se puede eliminar al administrador.';
+                return;
+            }
+            const confirmar = window.confirm(`¿Eliminar al usuario "${usuario.nombre}"? También se borrarán sus cultivos y sensores. Esta acción no se puede deshacer.`);
+            if (!confirmar) {
+                return;
+            }
+            if (this.editandoId === usuario.id) {
+                this.cancelarEdicion();
+            }
+            Alpine.store('datos').eliminarUsuario(usuario.id);
+                this.mensajeUsuario = `Usuario "${usuario.nombre}" eliminado.`;
+        }
+    }));
+
+    // Consulta global de cultivos y sensores de todos los usuarios, con filtro por usuario.
+    //Cada filtro nuevo es sufrir :c
+    Alpine.data('invernaderosGlobal', () => ({
+        usuarioId: '',
+
+        nombreUsuario(id) {
+            const usuario = Alpine.store('datos').usuarios.find((u) => u.id === id);
+            if (usuario) {
+                return usuario.nombre;
+            } 
+            else {
+                return '';
+            }
+        },
+
+        // Lista unificada de cultivos y sensores, con propietario y estado para la tabla.
+        get recursos() {
+            const store = Alpine.store('datos');
+            const lista = [];
+
+            store.cultivos.forEach((c) => {
+                lista.push({
+                    clave: `c${c.id}`,
+                    usuarioId: c.usuarioId,
+                    propietario: this.nombreUsuario(c.usuarioId),
+                    recurso: c.nombre,
+                    tipo: `Cultivo (${c.tipo})`,
+                    estado: '—',
+                    clase: ''
+                });
+            });
+
+            store.sensores.forEach((s) => {
+                lista.push({
+                    clave: `s${s.id}`,
+                    usuarioId: s.usuarioId,
+                    propietario: this.nombreUsuario(s.usuarioId),
+                    recurso: s.nombre,
+                    tipo: `Sensor (${s.unidad})`,
+                    estado: s.estado,
+                    clase: store.visualEstado(s.estado).clase
+                });
+            });
+
+            return lista;
+        },
+
+        // Recursos del usuario elegido en el filtro (o todos si no hay filtro).
+        get recursosVisibles() {
+            if (this.usuarioId === '') {
+                return this.recursos;
+            } 
+            else {
+                const id = Number(this.usuarioId);
+                return this.recursos.filter((r) => r.usuarioId === id); //r de recursos
+            }
+        }
+    }));
+
+
+    //-------------------------------------------------------------------------------------------------------------------------------------------------
     //Componente para el formulario de login.html
     //Busca el correo ingresado entre los usuarios registrados y redirige a la opágina de inicio que 
     //corresponda según su rol: admin->admin.html y usuario->dashboard.html

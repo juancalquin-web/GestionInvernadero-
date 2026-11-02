@@ -23,15 +23,16 @@
 
         <main class="main-container">
             <h2>Panel de Administración Global</h2>
-            
 
             <!--Panel de métricas globales-->
-            <div class="admin-grid">
-                <div class="card metric-card"><h3>Total de Usuarios</h3><p class="metric-value">3</p></div>
-                <div class="card metric-card"><h3>Cantidad de Invernaderos</h3><p class="metric-value">3</p></div>
-                <div class="card metric-card"><h3>Total de Cultivos</h3><p class="metric-value">7</p></div>
-                <div class="card metric-card"><h3>Total de Sensores</h3><p class="metric-value">9</p></div>
+            <div class="admin-grid" x-data="resumenAdmin()">
+                <article class="card metric-card"><h2>Total de usuarios</h2><p class="metric-value" x-text="totalUsuarios"></p></article>
+                <article class="card metric-card"><h2>Cantidad de invernaderos</h2><p class="metric-value" x-text="cantidadInvernaderos"></p></article>
+                <article class="card metric-card"><h2>Total de cultivos</h2><p class="metric-value" x-text="totalCultivos"></p></article>
+                <article class="card metric-card"><h2>Total de sensores</h2><p class="metric-value" x-text="totalSensores"></p></article>
+                <article class="card metric-card"><h2>Datos recolectados</h2><p class="metric-value" x-text="datosRecolectados"></p></article>
             </div>
+            <!--cambio de métricas estáticas a las que están en store-->
         </main>
     </body>
 </html>

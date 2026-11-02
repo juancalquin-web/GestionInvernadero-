@@ -22,147 +22,44 @@
         </header>
 
         <main class="main-container">
-            <h2>Invernaderos Globales</h2>
-
-            <!--Consulta de invernaderos por usuario con filtro-->
-            <div class="card admin-table-container">
-                <h3>Cultivos y Sensores de Usuarios del Sistema</h3>
+            <h1>Invernaderos globales</h1>
+            <section class="card admin-table-container" x-data="invernaderosGlobal()">
+                <h2>&#x1F4CB; Consulta global de invernaderos</h2>
+                <p>Cultivos y sensores de usuarios del sistema.</p>
 
                 <div class="admin-filter">
-                    <label for="filter-usuario">Filtrar por Usuario</label>
-                    <select id="filter-usuario">
-                        <option value="all">Todos los Usuarios</option>
-                        <option value="juan">Juan Calquín</option>
-                        <option value="paulina">Paulina González</option>
-                        <option value="diego">Diego Guzmán</option>
-                    </select>
+                <label for="filter-usuario">Filtrar por usuario</label>
+                <select id="filter-usuario" x-model="usuarioId">
+                    <option value="">Todos los usuarios</option>
+                    <template x-for="usuario in $store.datos.usuarios" :key="usuario.id">
+                    <option :value="String(usuario.id)" x-text="usuario.nombre"></option>
+                    </template>
+                </select>
                 </div>
 
+                <p class="muted" x-show="recursosVisibles.length === 0" role="status">No hay cultivos ni sensores para este usuario.</p>
+                <p class="muted" x-show="recursosVisibles.length === 0">Soy Admin &#x1F60E;</p>
+                <!--En mi opinión, esta linea es un mal necesario :v-->
+
+                <div class="table-container" x-show="recursosVisibles.length > 0">
                 <table class="admin-table">
                     <thead>
-                        <tr>
-                            <th>Propietario</th>
-                            <th>Recurso</th>
-                            <th>Tipo</th>
-                            <th>Estado</th>
-                        </tr>
+                    <tr><th>Propietario</th><th>Recurso</th><th>Tipo</th><th>Estado</th></tr>
                     </thead>
-
                     <tbody>
-                        <tr>
-                            <td>Juan Calquín</td>
-                            <td>Cardenal</td>
-                            <td>Cultivo (Flor)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Juan Calquín</td>
-                            <td>Canelo </td>
-                            <td>Cultivo (Árbol)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Juan Calquín</td>
-                            <td>Humedad_Suelo_Zona_1</td>
-                            <td>Sensor (m^3/m^3)</td> <!--Cómo se ponen fórmulas matemáticas???-->
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Juan Calquín</td>
-                            <td>Acidez_Suelo_Zona_1</td>
-                            <td>Sensor (pH)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Juan Calquín</td>
-                            <td>Temperatura_Zona_1</td>
-                            <td>Sensor (°C)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Tomate Cherry</td>
-                            <td>Cultivo (Alimentario)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Humedad_Suelo_Zona_1</td>
-                            <td>Sensor (m^3/m^3)</td> 
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Temperatura_Zona_1</td>
-                            <td>Sensor (°C)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Humedad_Ambiente_Zona_1</td>
-                            <td>Sensor (%HR)</td> <!--HR es humedad relativa-->
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Nomeolvides</td>
-                            <td>Cultivo (Flor)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Maitén</td>
-                            <td>Cultivo (Árbol)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Paulina González</td>
-                            <td>Acidez_Suelo_Zona_2</td>
-                            <td>Sensor (pH)</td>
-                            <td><span class="danger-mark">Desconectado</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Diego Guzmán</td>
-                            <td>Papa</td>
-                            <td>Cultivo (Alimentario)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Diego Guzmán</td>
-                            <td>Humedad_Suelo_Zona_1</td>
-                            <td>Sensor (m^3/m^3)</td>
-                            <td><span class="warning-mark">Mantenimiento</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Diego Guzmán</td>
-                            <td>Temperatura_Zona_1</td>
-                            <td>Sensor (°C)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Diego Guzmán</td>
-                            <td>Quillay</td>
-                            <td>Cultivo (Árbol)</td>
-                            <td><span class="success-mark">Activo</span></td>
-                        </tr>
+                    <template x-for="r in recursosVisibles" :key="r.clave">
+                    <tr>
+                        <td x-text="r.propietario"></td>
+                        <td x-text="r.recurso"></td>
+                        <td x-text="r.tipo"></td>
+                        <td><span :class="r.clase" x-text="r.estado"></span></td>
+                    </tr>
+                    </template>
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </section>
+            <!--Todos los datos que estaban estáticos aquí ahota están en app.js -->
         </main>
     </body>
 </html>

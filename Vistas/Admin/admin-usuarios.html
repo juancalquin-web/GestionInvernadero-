@@ -22,25 +22,41 @@
     </div>
   </nav>
 </header>
-<main class="main-container" x-data>
+<main class="main-container">
   <h1>Gestión de usuarios</h1>
-  <section class="card admin-table-container">
+  <section class="card admin-table-container" x-data="adminUsuarios()">
     <div class="admin-header-actions">
       <h2>&#x1F465; Usuarios del sistema</h2>
-      <button type="button" class="button button-primario" id="btn-mostrar-usuario" aria-expanded="false" aria-controls="form-crear-usuario">+ Crear nuevo usuario</button>
+      <button type="button" class="button button-primario" @click="abrirFormulario()" :aria-expanded="String(mostrarForm)" aria-controls="form-crear-usuario" x-show="!mostrarForm">+ Crear nuevo usuario</button>
     </div>
-    <form class="user-form" id="form-crear-usuario" hidden>
+
+    <p class="mensaje-exito" role="status" x-show="mensajeUsuario !== ''" x-text="mensajeUsuario"></p>
+
+    <form class="user-form" id="form-crear-usuario" @submit.prevent="crearUsuario()" x-show="mostrarForm" novalidate>
       <h3>Crear usuario de demostración</h3>
       <div class="user-fields">
-        <label for="user-name">Nombre
-          <input id="user-name" type="text" maxlength="100" required>
-        </label>
-        <label for="user-email">Correo
-          <input id="user-email" type="email" required>
-        </label>
+        <div>
+          <label for="user-name">Nombre</label>
+          <input id="user-name" type="text" maxlength="100" x-model="nuevo.nombre" :aria-invalid="String(Boolean(erroresUsuario.nombre))">
+          <span class="campo-error" x-show="erroresUsuario.nombre" x-text="erroresUsuario.nombre"></span>
+        </div>
+        <div>
+          <label for="user-email">Correo</label>
+          <input id="user-email" type="text" maxlength="120" x-model="nuevo.correo" :aria-invalid="String(Boolean(erroresUsuario.correo))">
+          <span class="campo-error" x-show="erroresUsuario.correo" x-text="erroresUsuario.correo"></span>
+        </div>
         <div class="user-actions">
           <button class="button-primario" type="submit">Crear usuario</button>
-          <button type="button" id="cancelar-usuario">Cancelar</button>
+          <button type="button" @click="cancelarAlta()">Cancelar</button>
+          <!--Por cierto, Alta refiere a cualquier cosa que agregue o cree algo
+          Por otro lado, baja es para eliminación de registros y similares
+          Online salía que Alta y Baja eran buenas terminologías para contexto de administración
+          Supuestamente, alguien sin experiencia técnica lo entendería
+          pero inicialmente me confundió el termino al investigar cosas para alpine
+          ya que la mayoría de los tutoriales están en inglés
+          y de los que hay en español usan términos como estos
+          y pensé por un momento que se referían a alta como "Dar de alta" en contexto médico
+          así que no me hacía sentido. Ahora sí-->
         </div>
       </div>
     </form>
@@ -55,40 +71,41 @@
           <tr>
             <td x-text="usuario.nombre"></td>
             <td x-text="usuario.correo"></td>
-            <td x-text="$store.datos.cultivos.filter((c) => c.usuarioId === usuario.id).length"></td> <!--c de cultivo-->
-            <td x-text="$store.datos.sensores.filter((s) => s.usuarioId === usuario.id).length"></td> <!--s de sensor-->
-            <!--Ahora se calculan los cultivos y sensores desde los datosd-->
-            <td><button type="button" class="button-action edit">Editar</button> <button type="button" class="button-action delete">Eliminar</button></td>
+            <td x-text="contarCultivos(usuario.id)"></td>
+            <td x-text="contarSensores(usuario.id)"></td>
+            <td class="actions-cell">
+              <button type="button" class="button-action edit" @click="iniciarEdicion(usuario)">Editar</button>
+              <button type="button" class="button-action delete" @click="eliminarUsuario(usuario)" :disabled="usuario.rol === 'admin'">Eliminar</button>
+            </td>
           </tr>
           </template>
         </tbody>
       </table>
     </div>
+
+    <form class="user-form" x-show="editandoId !== null" @submit.prevent="guardarEdicion()" novalidate>
+      <h3>Editar usuario</h3>
+      <p class="muted">Usuario: <strong x-text="nombreEditando"></strong> (la clave y el rol no se pueden cambiar)</p>
+      <div class="user-fields">
+        <div>
+          <label for="edit-user-name">Nombre</label>
+          <input id="edit-user-name" type="text" maxlength="100" x-model="formEditar.nombre" :aria-invalid="String(Boolean(erroresEditar.nombre))">
+          <span class="campo-error" x-show="erroresEditar.nombre" x-text="erroresEditar.nombre"></span>
+        </div>
+        <div>
+          <label for="edit-user-email">Correo</label>
+          <input id="edit-user-email" type="text" maxlength="120" x-model="formEditar.correo" :aria-invalid="String(Boolean(erroresEditar.correo))">
+          <span class="campo-error" x-show="erroresEditar.correo" x-text="erroresEditar.correo"></span>
+        </div>
+        <div class="user-actions">
+          <button class="button-primario" type="submit">Guardar cambios</button>
+          <button type="button" @click="cancelarEdicion()">Cancelar</button>
+        </div>
+      </div>
+    </form>
   </section>
 </main>
-
-<script>
-    const botonMostrarUsuario = document.getElementById('btn-mostrar-usuario');
-    const formularioUsuario = document.getElementById('form-crear-usuario');
-    const botonCancelarUsuario = document.getElementById('cancelar-usuario');
-
-    function mostrarFormularioUsuario(mostrar) {
-      formularioUsuario.hidden = !mostrar;
-      botonMostrarUsuario.setAttribute('aria-expanded', String(mostrar));
-    }
-
-    botonMostrarUsuario.addEventListener('click', () => {
-      mostrarFormularioUsuario(formularioUsuario.hidden);
-    });
-
-    botonCancelarUsuario.addEventListener('click', () => {
-      formularioUsuario.reset();
-      mostrarFormularioUsuario(false);
-      botonMostrarUsuario.focus();
-    });
-
-    mostrarFormularioUsuario(false);
-  </script>
+<!--Había un script aquí pero lo moví a app.js-->
 </body>
 <!--Olvidé el script que hace que esto funcione, editar código a las 2 am no es buena idea-->
 <!--Sin querer puse la versión que tenía un script en vez de la que corresponde aquí, mezclé los archivos de prueba con los del proyecto y son casi las 1 am-->
