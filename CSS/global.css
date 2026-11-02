@@ -197,7 +197,7 @@ a {
 .nav-button{
     padding: 0.5rem 1rem;
     cursor: pointer;
-    width: 100%;
+    width: auto;
     display: inline-block;
     text-align: center;
     background: transparent;
